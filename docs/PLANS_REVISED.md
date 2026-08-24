@@ -293,8 +293,8 @@ refresh 前的 sequence 與 cursor。
   SwipeRefreshLayout、Gson、Coil、Lich Component、Mockito、kotlin-test 與
   Robolectric。若 Robolectric test 需要替換 Lich component，再加入對應的
   Lich component test helper，不加入其他未使用的 Lich modules。
-- [ ] 設定 local JVM test source set 與 Robolectric resources。
-- [ ] 決定 minSdk、targetSdk、application id、Java/Kotlin toolchain 與 dependency
+- [x] 設定 local JVM test source set 與 Robolectric resources。
+- [x] 決定 minSdk、targetSdk、application id、Java/Kotlin toolchain 與 dependency
   versions，集中放在 version catalog 或一致的 Gradle 設定。
 - [x] 在 `assets` 加入四個 endpoint 的 fixture：DummyJson Feed、DummyJson
   Detail、SpaceFlight Feed、SpaceFlight Detail。
