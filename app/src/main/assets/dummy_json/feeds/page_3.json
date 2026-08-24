@@ -1,0 +1,67 @@
+{
+  "products": [
+    {
+      "id": 31,
+      "title": "Lemon",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/lemon/thumbnail.webp"
+    },
+    {
+      "id": 32,
+      "title": "Milk",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/milk/thumbnail.webp"
+    },
+    {
+      "id": 33,
+      "title": "Mulberry",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/mulberry/thumbnail.webp"
+    },
+    {
+      "id": 34,
+      "title": "Nescafe Coffee",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/nescafe-coffee/thumbnail.webp"
+    },
+    {
+      "id": 35,
+      "title": "Potatoes",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/potatoes/thumbnail.webp"
+    },
+    {
+      "id": 36,
+      "title": "Protein Powder",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/protein-powder/thumbnail.webp"
+    },
+    {
+      "id": 37,
+      "title": "Red Onions",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/red-onions/thumbnail.webp"
+    },
+    {
+      "id": 38,
+      "title": "Rice",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/rice/thumbnail.webp"
+    },
+    {
+      "id": 39,
+      "title": "Soft Drinks",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/soft-drinks/thumbnail.webp"
+    },
+    {
+      "id": 40,
+      "title": "Strawberry",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/strawberry/thumbnail.webp"
+    }
+  ],
+  "total": 194,
+  "skip": 30,
+  "limit": 10
+}

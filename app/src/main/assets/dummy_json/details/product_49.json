@@ -1,0 +1,60 @@
+{
+  "id": 49,
+  "title": "Black Aluminium Cup",
+  "description": "The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection.",
+  "category": "kitchen-accessories",
+  "price": 5.99,
+  "discountPercentage": 15.65,
+  "rating": 4.46,
+  "stock": 75,
+  "tags": [
+    "drinkware",
+    "cups"
+  ],
+  "sku": "KIT-BRD-BLA-049",
+  "weight": 7,
+  "dimensions": {
+    "width": 5.88,
+    "height": 5.11,
+    "depth": 10.03
+  },
+  "warrantyInformation": "1 year warranty",
+  "shippingInformation": "Ships overnight",
+  "availabilityStatus": "In Stock",
+  "reviews": [
+    {
+      "rating": 3,
+      "comment": "Very disappointed!",
+      "date": "2025-04-30T09:41:02.053Z",
+      "reviewerName": "Alexander Hernandez",
+      "reviewerEmail": "alexander.hernandez@x.dummyjson.com"
+    },
+    {
+      "rating": 5,
+      "comment": "Great value for money!",
+      "date": "2025-04-30T09:41:02.053Z",
+      "reviewerName": "Aurora Rodriguez",
+      "reviewerEmail": "aurora.rodriguez@x.dummyjson.com"
+    },
+    {
+      "rating": 1,
+      "comment": "Not worth the price!",
+      "date": "2025-04-30T09:41:02.053Z",
+      "reviewerName": "Benjamin Foster",
+      "reviewerEmail": "benjamin.foster@x.dummyjson.com"
+    }
+  ],
+  "returnPolicy": "30 days return policy",
+  "minimumOrderQuantity": 48,
+  "meta": {
+    "createdAt": "2025-04-30T09:41:02.053Z",
+    "updatedAt": "2025-04-30T09:41:02.053Z",
+    "barcode": "5606164195748",
+    "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
+  },
+  "images": [
+    "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/1.webp",
+    "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/2.webp"
+  ],
+  "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/thumbnail.webp"
+}

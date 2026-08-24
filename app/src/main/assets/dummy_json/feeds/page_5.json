@@ -1,0 +1,67 @@
+{
+  "products": [
+    {
+      "id": 51,
+      "title": "Boxed Blender",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/boxed-blender/thumbnail.webp"
+    },
+    {
+      "id": 52,
+      "title": "Carbon Steel Wok",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/carbon-steel-wok/thumbnail.webp"
+    },
+    {
+      "id": 53,
+      "title": "Chopping Board",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/chopping-board/thumbnail.webp"
+    },
+    {
+      "id": 54,
+      "title": "Citrus Squeezer Yellow",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/citrus-squeezer-yellow/thumbnail.webp"
+    },
+    {
+      "id": 55,
+      "title": "Egg Slicer",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/egg-slicer/thumbnail.webp"
+    },
+    {
+      "id": 56,
+      "title": "Electric Stove",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/electric-stove/thumbnail.webp"
+    },
+    {
+      "id": 57,
+      "title": "Fine Mesh Strainer",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/fine-mesh-strainer/thumbnail.webp"
+    },
+    {
+      "id": 58,
+      "title": "Fork",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/fork/thumbnail.webp"
+    },
+    {
+      "id": 59,
+      "title": "Glass",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/glass/thumbnail.webp"
+    },
+    {
+      "id": 60,
+      "title": "Grater Black",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/grater-black/thumbnail.webp"
+    }
+  ],
+  "total": 194,
+  "skip": 50,
+  "limit": 10
+}

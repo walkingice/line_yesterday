@@ -1,0 +1,59 @@
+{
+  "id": 48,
+  "title": "Bamboo Spatula",
+  "description": "The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes.",
+  "category": "kitchen-accessories",
+  "price": 7.99,
+  "discountPercentage": 2.84,
+  "rating": 3.27,
+  "stock": 37,
+  "tags": [
+    "kitchen tools",
+    "utensils"
+  ],
+  "sku": "KIT-BRD-BAM-048",
+  "weight": 3,
+  "dimensions": {
+    "width": 21.32,
+    "height": 23.03,
+    "depth": 25.94
+  },
+  "warrantyInformation": "1 month warranty",
+  "shippingInformation": "Ships overnight",
+  "availabilityStatus": "In Stock",
+  "reviews": [
+    {
+      "rating": 5,
+      "comment": "Awesome product!",
+      "date": "2025-04-30T09:41:02.053Z",
+      "reviewerName": "Lucas Ramirez",
+      "reviewerEmail": "lucas.ramirez@x.dummyjson.com"
+    },
+    {
+      "rating": 5,
+      "comment": "Highly recommended!",
+      "date": "2025-04-30T09:41:02.053Z",
+      "reviewerName": "Caleb Perkins",
+      "reviewerEmail": "caleb.perkins@x.dummyjson.com"
+    },
+    {
+      "rating": 4,
+      "comment": "Highly recommended!",
+      "date": "2025-04-30T09:41:02.053Z",
+      "reviewerName": "Nolan Gonzalez",
+      "reviewerEmail": "nolan.gonzalez@x.dummyjson.com"
+    }
+  ],
+  "returnPolicy": "60 days return policy",
+  "minimumOrderQuantity": 29,
+  "meta": {
+    "createdAt": "2025-04-30T09:41:02.053Z",
+    "updatedAt": "2025-04-30T09:41:02.053Z",
+    "barcode": "3988181417733",
+    "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
+  },
+  "images": [
+    "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/1.webp"
+  ],
+  "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/thumbnail.webp"
+}

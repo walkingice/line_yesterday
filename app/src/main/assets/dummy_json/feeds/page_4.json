@@ -1,0 +1,67 @@
+{
+  "products": [
+    {
+      "id": 41,
+      "title": "Tissue Paper Box",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/tissue-paper-box/thumbnail.webp"
+    },
+    {
+      "id": 42,
+      "title": "Water",
+      "category": "groceries",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/groceries/water/thumbnail.webp"
+    },
+    {
+      "id": 43,
+      "title": "Decoration Swing",
+      "category": "home-decoration",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/thumbnail.webp"
+    },
+    {
+      "id": 44,
+      "title": "Family Tree Photo Frame",
+      "category": "home-decoration",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/home-decoration/family-tree-photo-frame/thumbnail.webp"
+    },
+    {
+      "id": 45,
+      "title": "House Showpiece Plant",
+      "category": "home-decoration",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/home-decoration/house-showpiece-plant/thumbnail.webp"
+    },
+    {
+      "id": 46,
+      "title": "Plant Pot",
+      "category": "home-decoration",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/thumbnail.webp"
+    },
+    {
+      "id": 47,
+      "title": "Table Lamp",
+      "category": "home-decoration",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/home-decoration/table-lamp/thumbnail.webp"
+    },
+    {
+      "id": 48,
+      "title": "Bamboo Spatula",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/thumbnail.webp"
+    },
+    {
+      "id": 49,
+      "title": "Black Aluminium Cup",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/thumbnail.webp"
+    },
+    {
+      "id": 50,
+      "title": "Black Whisk",
+      "category": "kitchen-accessories",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-whisk/thumbnail.webp"
+    }
+  ],
+  "total": 194,
+  "skip": 40,
+  "limit": 10
+}
