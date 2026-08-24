@@ -328,7 +328,7 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 ### Implementation
 
-- [ ] Create a single Android application module and a minimal Hello World app.
+- [x] Create a single Android application module and a minimal Hello World app.
 - [ ] Configure Kotlin, Android Jetpack, coroutines, Flow, Room, RecyclerView,
   SwipeRefreshLayout, Gson, Coil, Lich Component, Mockito, kotlin-test, and
   Robolectric. If Robolectric tests need to replace the Lich component, also add
