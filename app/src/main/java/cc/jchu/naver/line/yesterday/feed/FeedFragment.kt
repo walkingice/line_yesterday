@@ -12,6 +12,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import cc.jchu.naver.line.yesterday.detail.DetailActivity
 import cc.jchu.naver.line.yesterday.data.domain.FeedFooterState
+import cc.jchu.naver.line.yesterday.data.domain.FeedItem
+import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.data.domain.FeedUiState
 import cc.jchu.naver.line.yesterday.databinding.FragmentFeedBinding
 import cc.jchu.naver.line.yesterday.di.applicationComponent
@@ -36,7 +38,9 @@ class FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = FeedAdapter(
-            onItemClick = {},
+            onItemClick = { item ->
+                startActivity(detailIntentFor(requireContext(), item))
+            },
             onFooterClick = {
                 val state = viewModel.uiState.value.footerState
                 handleFooterAction(state, viewModel::loadMoreItems, viewModel::loadMoreItems)
@@ -47,7 +51,6 @@ class FeedFragment : Fragment() {
         binding.swipeRefresh.setOnRefreshListener { viewModel.refresh() }
         binding.screenName.apply {
             text = viewModel.screenName
-            setOnClickListener { openFixedDetail() }
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -58,11 +61,16 @@ class FeedFragment : Fragment() {
         }
     }
 
-    private fun openFixedDetail() {
-        startActivity(
-            DetailActivity.createIntent(requireContext(), DetailActivity.SOURCE_DUMMY_JSON, "1"),
-        )
-    }
+}
+
+internal fun detailIntentFor(
+    context: android.content.Context,
+    item: FeedItem,
+) = DetailActivity.createIntent(context, item.source.toDetailSource(), item.id)
+
+private fun FeedSource.toDetailSource(): String = when (this) {
+    FeedSource.DUMMY_JSON -> DetailActivity.SOURCE_DUMMY_JSON
+    FeedSource.SPACE_FLIGHT -> DetailActivity.SOURCE_SPACE_FLIGHT
 }
 
 internal fun handleFooterAction(

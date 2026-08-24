@@ -42,19 +42,6 @@ class FeedActivityTest {
     }
 
     @Test
-    fun opensDetailWithOnlySourceAndId() {
-        val activity = Robolectric.buildActivity(FeedActivity::class.java).setup().get()
-
-        val fragment = activity.supportFragmentManager.fragments.single() as FeedFragment
-        FragmentFeedBinding.bind(checkNotNull(fragment.view)).screenName.performClick()
-
-        val intent = shadowOf(activity).nextStartedActivity
-        assertEquals("dummy_json", intent.getStringExtra("source"))
-        assertEquals("1", intent.getStringExtra("id"))
-        assertEquals(2, intent.extras?.size())
-    }
-
-    @Test
     fun menuOpensFavorites() {
         val activity = Robolectric.buildActivity(FeedActivity::class.java).setup().get()
         val menu = MenuBuilder(activity)

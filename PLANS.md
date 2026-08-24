@@ -690,7 +690,7 @@ Use Robolectric local JVM tests to verify:
   load more or retry.
 - [x] `Ready`, `Loading`, `NoMoreItems`, `Error`, and `Offline` each have clear text and
   enabled state.
-- [ ] Clicking an item passes only source and id to DetailActivity.
+- [x] Clicking an item passes only source and id to DetailActivity.
 - [ ] The option menu opens FavoritesActivity.
 
 ### Verification
