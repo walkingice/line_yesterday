@@ -564,7 +564,7 @@ Use Robolectric local JVM tests to verify:
 - [ ] A successful source can update and advance independently. A failed source keeps
   its cursor and retries the same page next time.
 - [ ] Do not create requests for an exhausted source.
-- [ ] Implement deduplication and deterministic alternating merge with pure functions.
+- [x] Implement deduplication and deterministic alternating merge with pure functions.
 - [ ] `loadMoreItems()` returns immediately while Loading, refreshing, or
   NoMoreItems.
 - [ ] `refresh()` returns immediately while load more or refresh is running.
