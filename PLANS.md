@@ -443,8 +443,8 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 ### Step 3.2: Favorite Persistence
 
-- [ ] Create `FavoriteEntity` with `(sourceType, itemId)` as a composite primary key.
-- [ ] Save `addedAt`, title, imgUrl, description, and an extraInformation snapshot.
+- [x] Create `FavoriteEntity` with `(sourceType, itemId)` as a composite primary key.
+- [x] Save `addedAt`, title, imgUrl, description, and an extraInformation snapshot.
 - [ ] `FavoriteDao` queries by `addedAt DESC`. For identical timestamps, sort by
   sourceType and then itemId to keep tests deterministic.
 - [ ] Create the `FavoriteStore` interface and Room-backed implementation.
