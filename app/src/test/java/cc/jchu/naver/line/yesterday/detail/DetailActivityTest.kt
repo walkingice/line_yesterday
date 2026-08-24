@@ -4,11 +4,13 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.appcompat.view.menu.MenuBuilder
 import cc.jchu.naver.line.yesterday.data.domain.DataError
 import cc.jchu.naver.line.yesterday.data.domain.Detail
 import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.databinding.FragmentDetailBinding
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,25 +81,21 @@ class DetailActivityTest {
     }
 
     @Test
-    fun rendersFavoriteStateAndDisablesToggleWhileUpdating() {
-        val binding = FragmentDetailBinding.inflate(
-            LayoutInflater.from(RuntimeEnvironment.getApplication()),
-            FrameLayout(RuntimeEnvironment.getApplication()),
-            false,
-        )
+    fun rendersFavoriteActionInAppBar() {
+        val activity = Robolectric.buildActivity(DetailActivity::class.java).setup().get()
+        val menu = MenuBuilder(activity)
+        activity.onCreateOptionsMenu(menu)
+        val menuItem = menu.getItem(0)
 
-        renderDetailState(binding, DetailUiState(detail = detail(), isFavorite = true))
+        activity.renderFavoriteAction(DetailUiState(detail = detail(), isFavorite = true))
 
-        assertEquals(View.VISIBLE, binding.detailFavorite.visibility)
-        assertEquals("Remove from favorites", binding.detailFavorite.contentDescription)
+        assertTrue(menuItem.isVisible)
+        assertTrue(menuItem.isEnabled)
+        assertEquals("Remove from favorites", menuItem.contentDescription)
 
-        renderDetailState(
-            binding,
-            DetailUiState(detail = detail(), isTogglingFavorite = true),
-        )
+        activity.renderFavoriteAction(DetailUiState(isLoading = true))
 
-        assertEquals(false, binding.detailFavorite.isEnabled)
-        assertEquals("Add to favorites", binding.detailFavorite.contentDescription)
+        assertFalse(menuItem.isEnabled)
     }
 
     @Test
