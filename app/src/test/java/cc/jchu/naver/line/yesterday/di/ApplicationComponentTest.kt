@@ -5,6 +5,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
 class ApplicationComponentTest {
@@ -20,5 +21,10 @@ class ApplicationComponentTest {
         assertSame(context, first.applicationContext)
         assertSame(first.database, second.database)
         assertSame(first.database.jsonCacheDao(), second.database.jsonCacheDao())
+        assertTrue(first.timeProvider is cc.jchu.naver.line.yesterday.data.provider.SystemTimeProvider)
+        assertTrue(
+            first.networkStatusProvider is
+                cc.jchu.naver.line.yesterday.data.provider.ConnectivityNetworkStatusProvider,
+        )
     }
 }

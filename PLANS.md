@@ -650,7 +650,7 @@ Use Robolectric local JVM tests to verify:
   only for retrieving the component; objects inside it still use constructor
   injection.
 - [x] Create and retain a single AppDatabase through that component.
-- [ ] Create production TimeProvider, NetworkStatusProvider, Clients,
+- [x] Create production TimeProvider, NetworkStatusProvider, Clients,
   Stores, and Repositories.
 - [ ] Create three ViewModel factories. Fragment retrieves a factory only through the
   Lich component and does not manually instantiate Repository or Database.
