@@ -624,7 +624,7 @@ Use Robolectric local JVM tests to verify:
   through FavoritesRepository so toggles on the Detail screen are reflected.
 - [x] Preserve a reasonable visible limit after refresh, but do not exceed the current
   total count.
-- [ ] Favorite is a local operation and does not show Offline due to network state.
+- [x] Favorite is a local operation and does not show Offline due to network state.
 
 ### Tests
 

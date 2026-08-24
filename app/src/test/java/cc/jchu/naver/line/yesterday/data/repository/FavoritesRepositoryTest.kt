@@ -6,6 +6,7 @@ import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.data.favorite.FavoriteEntry
 import cc.jchu.naver.line.yesterday.data.favorite.FavoriteStore
 import cc.jchu.naver.line.yesterday.data.provider.FakeTimeProvider
+import cc.jchu.naver.line.yesterday.data.provider.FakeNetworkStatusProvider
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -47,6 +48,19 @@ class FavoritesRepositoryTest {
 
         assertEquals(10L, store.entries.single().addedAt)
         assertEquals("New", store.entries.single().title)
+    }
+
+    @Test
+    fun localFavoriteOperationsWorkWhileNetworkIsOffline() = runBlocking {
+        val network = FakeNetworkStatusProvider(online = false)
+        val store = FakeStore()
+        val repository = FavoritesRepository(store, FakeTimeProvider())
+
+        repository.add(item)
+        assertTrue(repository.isFavorite(FeedSource.DUMMY_JSON, "1"))
+        assertFalse(repository.toggle(item))
+        assertFalse(network.isOnline())
+        assertFalse(repository.isFavorite(FeedSource.DUMMY_JSON, "1"))
     }
 
     private class FakeStore : FavoriteStore {
