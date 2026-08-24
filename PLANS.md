@@ -716,7 +716,7 @@ Use Robolectric local JVM tests to verify:
   error.
 - [x] Keep stale detail visible after it appears. Update it when background refresh
   succeeds; provide a non-destructive error indication when refresh fails.
-- [ ] No-cache Offline/Error states provide a retry action.
+- [x] No-cache Offline/Error states provide a retry action.
 - [ ] The favorite icon renders the current state. Prevent repeated taps while an
   operation is running, then update the icon after success.
 - [ ] An invalid source/id shows an error and allows Back without crashing.

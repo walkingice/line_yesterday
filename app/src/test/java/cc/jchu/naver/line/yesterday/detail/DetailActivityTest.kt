@@ -55,8 +55,27 @@ class DetailActivityTest {
 
         assertEquals(View.VISIBLE, binding.detailContent.visibility)
         assertEquals(View.GONE, binding.detailLoading.visibility)
-        assertEquals(View.VISIBLE, binding.detailError.visibility)
+        assertEquals(View.GONE, binding.detailErrorPanel.visibility)
+        assertEquals(View.VISIBLE, binding.detailRefreshError.visibility)
         assertEquals("Title", binding.detailTitle.text)
+    }
+
+    @Test
+    fun showsRetryForNoCacheError() {
+        val binding = FragmentDetailBinding.inflate(
+            LayoutInflater.from(RuntimeEnvironment.getApplication()),
+            FrameLayout(RuntimeEnvironment.getApplication()),
+            false,
+        )
+
+        renderDetailState(
+            binding,
+            DetailUiState(error = DataError.Offline),
+        )
+
+        assertEquals(View.VISIBLE, binding.detailErrorPanel.visibility)
+        assertEquals(View.VISIBLE, binding.detailRetry.visibility)
+        assertEquals(View.GONE, binding.detailRefreshError.visibility)
     }
 
     @Test

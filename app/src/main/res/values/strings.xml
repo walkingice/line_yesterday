@@ -8,4 +8,5 @@
     <string name="feed_item_image">Feed item image</string>
     <string name="detail_image">Detail image</string>
     <string name="detail_error_content">Unable to load detail</string>
+    <string name="detail_retry">Retry</string>
 </resources>

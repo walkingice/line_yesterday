@@ -34,9 +34,11 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.screenName.text = screenLabel()
         if (!viewModel.isArgumentsValid) {
+            binding.detailErrorPanel.visibility = View.VISIBLE
             binding.detailError.visibility = View.VISIBLE
             return
         }
+        binding.detailRetry.setOnClickListener { viewModel.retry() }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { state ->
@@ -76,7 +78,17 @@ internal fun renderDetailState(binding: FragmentDetailBinding, state: DetailUiSt
         View.GONE
     }
     binding.detailContent.visibility = if (detail == null) View.GONE else View.VISIBLE
-    binding.detailError.visibility = if (state.error == null) View.GONE else View.VISIBLE
+    binding.detailErrorPanel.visibility = if (detail == null && state.error != null) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
+    binding.detailRetry.visibility = if (state.canRetry) View.VISIBLE else View.GONE
+    binding.detailRefreshError.visibility = if (detail != null && state.error != null) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
     if (detail == null) return
 
     binding.detailImage.load(detail.imgUrl)
