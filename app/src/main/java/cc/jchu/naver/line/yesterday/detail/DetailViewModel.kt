@@ -2,6 +2,9 @@ package cc.jchu.naver.line.yesterday.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cc.jchu.naver.line.yesterday.data.domain.DataError
+import cc.jchu.naver.line.yesterday.data.domain.Detail
+import cc.jchu.naver.line.yesterday.data.domain.DetailLoadEvent
 import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.data.repository.DetailReader
 import kotlinx.coroutines.CoroutineDispatcher
@@ -65,11 +68,36 @@ class DetailViewModel(
         val arguments = checkNotNull(detailArguments)
         val reader = checkNotNull(detailReader)
         viewModelScope.launch(dispatcher) {
-            reader.getDetail(arguments.source, arguments.id).collect { }
+            reader.getDetail(arguments.source, arguments.id).collect(::handleEvent)
+        }
+    }
+
+    private fun handleEvent(event: DetailLoadEvent) {
+        _uiState.value = when (event) {
+            is DetailLoadEvent.Cached -> _uiState.value.copy(
+                detail = event.detail,
+                isLoading = event.isStale,
+                error = null,
+            )
+            is DetailLoadEvent.Updated -> _uiState.value.copy(
+                detail = event.detail,
+                isLoading = false,
+                error = null,
+            )
+            is DetailLoadEvent.RefreshFailed -> _uiState.value.copy(
+                isLoading = false,
+                error = event.error,
+            )
+            is DetailLoadEvent.LoadFailed -> _uiState.value.copy(
+                isLoading = false,
+                error = event.error,
+            )
         }
     }
 }
 
 data class DetailUiState(
     val isLoading: Boolean = false,
+    val detail: Detail? = null,
+    val error: DataError? = null,
 )

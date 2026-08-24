@@ -2,9 +2,12 @@ package cc.jchu.naver.line.yesterday.detail
 
 import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.data.domain.DetailLoadEvent
+import cc.jchu.naver.line.yesterday.data.domain.Detail
+import cc.jchu.naver.line.yesterday.data.domain.DataError
 import cc.jchu.naver.line.yesterday.data.repository.DetailReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -62,6 +65,43 @@ class DetailViewModelTest {
         assertEquals(0, reader.requests)
     }
 
+    @Test
+    fun preservesStaleDetailWhenRefreshFails() {
+        val detail = detail()
+        val reader = EventDetailReader(
+            flowOf(
+                DetailLoadEvent.Cached(detail, isStale = true),
+                DetailLoadEvent.RefreshFailed(DataError.Offline),
+            ),
+        )
+
+        val viewModel = DetailViewModel(
+            DetailArguments(FeedSource.DUMMY_JSON, "47"),
+            reader,
+            Dispatchers.Unconfined,
+        )
+
+        assertEquals(detail, viewModel.uiState.value.detail)
+        assertEquals(DataError.Offline, viewModel.uiState.value.error)
+        assertTrue(!viewModel.uiState.value.isLoading)
+    }
+
+    @Test
+    fun updatedDetailEndsLoadingAndClearsError() {
+        val detail = detail()
+        val reader = EventDetailReader(flowOf(DetailLoadEvent.Updated(detail)))
+
+        val viewModel = DetailViewModel(
+            DetailArguments(FeedSource.DUMMY_JSON, "47"),
+            reader,
+            Dispatchers.Unconfined,
+        )
+
+        assertEquals(detail, viewModel.uiState.value.detail)
+        assertNull(viewModel.uiState.value.error)
+        assertTrue(!viewModel.uiState.value.isLoading)
+    }
+
     private class RecordingDetailReader : DetailReader {
         var requests = 0
         var source: FeedSource? = null
@@ -74,4 +114,19 @@ class DetailViewModelTest {
                 this.id = id
             }
     }
+
+    private class EventDetailReader(
+        private val events: kotlinx.coroutines.flow.Flow<DetailLoadEvent>,
+    ) : DetailReader {
+        override fun getDetail(source: FeedSource, id: String) = events
+    }
+
+    private fun detail() = Detail(
+        id = "47",
+        source = FeedSource.DUMMY_JSON,
+        title = "Product",
+        imgUrl = "image",
+        description = "Description",
+        extraInformation = "category",
+    )
 }
