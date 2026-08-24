@@ -4,16 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import cc.jchu.naver.line.yesterday.R
+import cc.jchu.naver.line.yesterday.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityDetailBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, DetailFragment())
+                .replace(binding.fragmentContainer.id, DetailFragment())
                 .commit()
         }
     }

@@ -7,6 +7,9 @@ plugins {
 
 android {
     namespace = "cc.jchu.naver.line.yesterday"
+    buildFeatures {
+        viewBinding = true
+    }
     compileSdk {
         version = release(libs.versions.androidCompileSdk.get().toInt())
     }

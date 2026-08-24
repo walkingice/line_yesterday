@@ -1,9 +1,7 @@
 package cc.jchu.naver.line.yesterday.favorites
 
-import android.widget.TextView
-import androidx.fragment.app.FragmentContainerView
 import androidx.appcompat.view.menu.MenuBuilder
-import cc.jchu.naver.line.yesterday.R
+import cc.jchu.naver.line.yesterday.databinding.FragmentFavoritesBinding
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -17,9 +15,12 @@ class FavoritesActivityTest {
     fun createsAndAttachesFavoritesFragment() {
         val activity = Robolectric.buildActivity(FavoritesActivity::class.java).setup().get()
 
-        assertTrue(activity.findViewById<FragmentContainerView>(R.id.fragment_container) != null)
-        assertTrue(activity.supportFragmentManager.fragments.single() is FavoritesFragment)
-        assertEquals("Favorites", activity.findViewById<TextView>(R.id.screen_name).text)
+        val fragment = activity.supportFragmentManager.fragments.single() as FavoritesFragment
+
+        assertEquals(
+            "Favorites",
+            FragmentFavoritesBinding.bind(checkNotNull(fragment.view)).screenName.text,
+        )
     }
 
     @Test

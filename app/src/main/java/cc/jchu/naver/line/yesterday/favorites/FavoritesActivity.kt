@@ -2,16 +2,19 @@ package cc.jchu.naver.line.yesterday.favorites
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import cc.jchu.naver.line.yesterday.R
+import cc.jchu.naver.line.yesterday.databinding.ActivityFavoritesBinding
 
 class FavoritesActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityFavoritesBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_favorites)
+        binding = ActivityFavoritesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, FavoritesFragment())
+                .replace(binding.fragmentContainer.id, FavoritesFragment())
                 .commit()
         }
     }

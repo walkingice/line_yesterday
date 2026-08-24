@@ -6,15 +6,19 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import cc.jchu.naver.line.yesterday.favorites.FavoritesActivity
 import cc.jchu.naver.line.yesterday.R
+import cc.jchu.naver.line.yesterday.databinding.ActivityFeedBinding
 
 class FeedActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityFeedBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_feed)
+        binding = ActivityFeedBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, FeedFragment())
+                .replace(binding.fragmentContainer.id, FeedFragment())
                 .commit()
         }
     }
