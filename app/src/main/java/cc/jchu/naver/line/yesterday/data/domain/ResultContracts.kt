@@ -43,3 +43,9 @@ data class FeedUiState(
     val refreshing: Boolean = false,
     val footerState: FeedFooterState = FeedFooterState.Ready,
 )
+
+data class FavoritesUiState(
+    val items: List<FeedItem> = emptyList(),
+    val totalCount: Int = 0,
+    val footerState: FeedFooterState = FeedFooterState.Ready,
+)
