@@ -20,6 +20,22 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<TextView>(R.id.screen_name).text = viewModel.screenName
+        view.findViewById<TextView>(R.id.screen_name).text = screenLabel()
+    }
+
+    private fun screenLabel(): String =
+        if (hasValidArguments()) viewModel.screenName else "Invalid detail"
+
+    private fun hasValidArguments(): Boolean {
+        val source = activity?.intent?.getStringExtra(DetailActivity.EXTRA_SOURCE)
+        val id = activity?.intent?.getStringExtra(DetailActivity.EXTRA_ID)
+        return source in validSources && !id.isNullOrBlank()
+    }
+
+    private companion object {
+        val validSources = setOf(
+            DetailActivity.SOURCE_DUMMY_JSON,
+            DetailActivity.SOURCE_SPACE_FLIGHT,
+        )
     }
 }

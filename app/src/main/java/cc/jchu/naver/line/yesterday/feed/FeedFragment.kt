@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cc.jchu.naver.line.yesterday.R
+import cc.jchu.naver.line.yesterday.detail.DetailActivity
 
 class FeedFragment : Fragment() {
     private val viewModel by lazy { ViewModelProvider(this)[FeedViewModel::class.java] }
@@ -20,6 +21,15 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<TextView>(R.id.screen_name).text = viewModel.screenName
+        view.findViewById<TextView>(R.id.screen_name).apply {
+            text = viewModel.screenName
+            setOnClickListener { openFixedDetail() }
+        }
+    }
+
+    private fun openFixedDetail() {
+        startActivity(
+            DetailActivity.createIntent(requireContext(), DetailActivity.SOURCE_DUMMY_JSON, "1"),
+        )
     }
 }

@@ -361,11 +361,11 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 - [x] Create three sets of Activities, Fragments, layouts, and ViewModels.
 - [x] Temporarily show only the screen name in each Fragment.
 - [x] Use `FeedActivity` as the launcher Activity.
-- [ ] The temporary Feed item action may use a fixed source/id to open Detail.
-- [ ] The Feed option menu can open Favorites.
-- [ ] Favorites has no option menu. Back finishes FavoritesActivity and returns to
+- [x] The temporary Feed item action may use a fixed source/id to open Detail.
+- [x] The Feed option menu can open Favorites.
+- [x] Favorites has no option menu. Back finishes FavoritesActivity and returns to
   Feed.
-- [ ] Activity intents contain only source and id. If Detail receives missing or
+- [x] Activity intents contain only source and id. If Detail receives missing or
   invalid arguments, show an error and let the user go Back without crashing.
 
 ### Tests and Verification
