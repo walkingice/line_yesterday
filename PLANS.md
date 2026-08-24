@@ -691,7 +691,7 @@ Use Robolectric local JVM tests to verify:
 - [x] `Ready`, `Loading`, `NoMoreItems`, `Error`, and `Offline` each have clear text and
   enabled state.
 - [x] Clicking an item passes only source and id to DetailActivity.
-- [ ] The option menu opens FavoritesActivity.
+- [x] The option menu opens FavoritesActivity.
 
 ### Verification
 
