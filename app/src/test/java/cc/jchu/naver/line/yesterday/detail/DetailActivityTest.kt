@@ -79,6 +79,28 @@ class DetailActivityTest {
     }
 
     @Test
+    fun rendersFavoriteStateAndDisablesToggleWhileUpdating() {
+        val binding = FragmentDetailBinding.inflate(
+            LayoutInflater.from(RuntimeEnvironment.getApplication()),
+            FrameLayout(RuntimeEnvironment.getApplication()),
+            false,
+        )
+
+        renderDetailState(binding, DetailUiState(detail = detail(), isFavorite = true))
+
+        assertEquals(View.VISIBLE, binding.detailFavorite.visibility)
+        assertEquals("Remove from favorites", binding.detailFavorite.contentDescription)
+
+        renderDetailState(
+            binding,
+            DetailUiState(detail = detail(), isTogglingFavorite = true),
+        )
+
+        assertEquals(false, binding.detailFavorite.isEnabled)
+        assertEquals("Add to favorites", binding.detailFavorite.contentDescription)
+    }
+
+    @Test
     fun rendersUpdatedDetailAfterStaleContent() {
         val binding = FragmentDetailBinding.inflate(
             LayoutInflater.from(RuntimeEnvironment.getApplication()),
@@ -149,4 +171,5 @@ class DetailActivityTest {
         description = "Description",
         extraInformation = "Extra",
     )
+
 }

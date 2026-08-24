@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.ViewModelProvider
 import coil3.load
+import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.databinding.FragmentDetailBinding
 import cc.jchu.naver.line.yesterday.di.applicationComponent
 import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
@@ -38,6 +39,7 @@ class DetailFragment : Fragment() {
             binding.detailError.visibility = View.VISIBLE
             return
         }
+        binding.detailFavorite.setOnClickListener { viewModel.toggleFavorite() }
         binding.detailRetry.setOnClickListener { viewModel.retry() }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -78,6 +80,16 @@ internal fun renderDetailState(binding: FragmentDetailBinding, state: DetailUiSt
         View.GONE
     }
     binding.detailContent.visibility = if (detail == null) View.GONE else View.VISIBLE
+    binding.detailFavorite.visibility = if (detail == null) View.GONE else View.VISIBLE
+    binding.detailFavorite.isEnabled = !state.isTogglingFavorite
+    binding.detailFavorite.setImageResource(
+        if (state.isFavorite) android.R.drawable.btn_star_big_on
+        else android.R.drawable.btn_star_big_off,
+    )
+    binding.detailFavorite.contentDescription = binding.root.context.getString(
+        if (state.isFavorite) R.string.detail_remove_favorite
+        else R.string.detail_add_favorite,
+    )
     binding.detailErrorPanel.visibility = if (detail == null && state.error != null) {
         View.VISIBLE
     } else {

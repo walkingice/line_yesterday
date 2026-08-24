@@ -9,4 +9,6 @@
     <string name="detail_image">Detail image</string>
     <string name="detail_error_content">Unable to load detail</string>
     <string name="detail_retry">Retry</string>
+    <string name="detail_add_favorite">Add to favorites</string>
+    <string name="detail_remove_favorite">Remove from favorites</string>
 </resources>
