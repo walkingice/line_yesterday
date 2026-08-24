@@ -139,6 +139,10 @@ class DetailActivityTest {
             "Invalid detail",
             FragmentDetailBinding.bind(checkNotNull(fragment.view)).screenName.text,
         )
+        assertEquals(
+            View.VISIBLE,
+            FragmentDetailBinding.bind(checkNotNull(fragment.view)).detailErrorPanel.visibility,
+        )
         assertTrue(!activity.isFinishing)
         activity.onBackPressed()
         assertTrue(activity.isFinishing)
@@ -157,6 +161,10 @@ class DetailActivityTest {
         assertEquals(
             "Invalid detail",
             FragmentDetailBinding.bind(checkNotNull(fragment.view)).screenName.text,
+        )
+        assertEquals(
+            View.VISIBLE,
+            FragmentDetailBinding.bind(checkNotNull(fragment.view)).detailErrorPanel.visibility,
         )
         assertTrue(!activity.isFinishing)
         activity.onBackPressed()

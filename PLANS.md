@@ -719,7 +719,7 @@ Use Robolectric local JVM tests to verify:
 - [x] No-cache Offline/Error states provide a retry action.
 - [x] The favorite icon renders the current state. Prevent repeated taps while an
   operation is running, then update the icon after success.
-- [ ] An invalid source/id shows an error and allows Back without crashing.
+- [x] An invalid source/id shows an error and allows Back without crashing.
 
 ### Verification
 
