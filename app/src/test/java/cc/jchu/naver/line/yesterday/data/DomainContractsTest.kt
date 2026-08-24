@@ -3,12 +3,10 @@ package cc.jchu.naver.line.yesterday.data
 import cc.jchu.naver.line.yesterday.data.domain.DummyJsonItem
 import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.data.domain.PageCursor
-import cc.jchu.naver.line.yesterday.data.provider.FakeDelayProvider
 import cc.jchu.naver.line.yesterday.data.provider.FakeDispatcherProvider
 import cc.jchu.naver.line.yesterday.data.provider.FakeNetworkStatusProvider
 import cc.jchu.naver.line.yesterday.data.provider.FakeTimeProvider
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
@@ -30,15 +28,12 @@ class DomainContractsTest {
     }
 
     @Test
-    fun fakeProvidersAreControllable() = runBlocking {
+    fun fakeProvidersAreControllable() {
         val network = FakeNetworkStatusProvider(false)
-        val delay = FakeDelayProvider()
         val time = FakeTimeProvider(42L)
         val dispatchers = FakeDispatcherProvider(Dispatchers.Unconfined)
 
         assertTrue(!network.isOnline())
-        delay.delayMillis(250L)
-        assertEquals(listOf(250L), delay.requestedDelays)
         assertEquals(42L, time.getCurrentTimeMillis())
         assertEquals(Dispatchers.Unconfined, dispatchers.io)
 

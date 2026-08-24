@@ -396,7 +396,7 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 ### Step 2.2: DTOs, Parsers, and Mappers
 
-- [ ] Create API DTOs from the four fixture types.
+- [x] Create API DTOs from the four fixture types.
 - [ ] Create Gson parsers and DTO-to-domain mappers. Do not put Gson annotations in
   domain models.
 - [ ] The Feed parser produces items together with the next cursor/exhausted
