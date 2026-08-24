@@ -683,7 +683,7 @@ Use Robolectric local JVM tests to verify:
 - [x] Use one adapter supporting three view types: DummyJson item, SpaceFlight item,
   and footer state button.
 - [ ] Item layouts show title, source-specific information, and a Coil image.
-- [ ] Use stable `(source, id)` identity and DiffUtil.
+- [x] Use stable `(source, id)` identity and DiffUtil.
 - [ ] Collect `FeedUiState` in a lifecycle-aware manner. Rendering must not modify
   ViewModel state directly.
 - [ ] Pull-to-refresh calls `refresh()`. Depending on state, the footer button calls
