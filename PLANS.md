@@ -482,13 +482,13 @@ Use Robolectric local JVM tests to verify:
 
 ### Step 4.1: Freshness and Cache Policy
 
-- [ ] Implement `FreshnessValidator` with injected freshness duration and
+- [x] Implement `FreshnessValidator` with injected freshness duration and
   `TimeProvider`.
-- [ ] Select the actual freshness duration and store it as a constant.
-- [ ] Use `age = maxOf(0, now - timestamp)`. Data is fresh only when
+- [x] Select the actual freshness duration and store it as a constant.
+- [x] Use `age = maxOf(0, now - timestamp)`. Data is fresh only when
   `age < duration`; it is expired at exactly the duration boundary, and future
   timestamps have age 0.
-- [ ] Explicitly test timestamps before expiration, exactly at the boundary, after
+- [x] Explicitly test timestamps before expiration, exactly at the boundary, after
   expiration, and in the future.
 - [ ] Encapsulate fresh hit, miss, stale hit, forced refresh, parse failure, and write
   failure flows in small helpers so the two sources do not duplicate the entire
