@@ -8,20 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cc.jchu.naver.line.yesterday.detail.DetailActivity
 import cc.jchu.naver.line.yesterday.databinding.FragmentFeedBinding
+import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
 
 class FeedFragment : Fragment() {
     private val viewModel by lazy { ViewModelProvider(this)[FeedViewModel::class.java] }
-    private var _binding: FragmentFeedBinding? = null
-    private val binding get() = checkNotNull(_binding)
+    private val binding by viewBinding(FragmentFeedBinding::bind)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        _binding = FragmentFeedBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    ): View = FragmentFeedBinding.inflate(inflater, container, false).root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,11 +26,6 @@ class FeedFragment : Fragment() {
             text = viewModel.screenName
             setOnClickListener { openFixedDetail() }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun openFixedDetail() {

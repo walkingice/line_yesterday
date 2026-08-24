@@ -7,29 +7,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cc.jchu.naver.line.yesterday.databinding.FragmentDetailBinding
+import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
 
 class DetailFragment : Fragment() {
     private val viewModel by lazy { ViewModelProvider(this)[DetailViewModel::class.java] }
-    private var _binding: FragmentDetailBinding? = null
-    private val binding get() = checkNotNull(_binding)
+    private val binding by viewBinding(FragmentDetailBinding::bind)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        _binding = FragmentDetailBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    ): View = FragmentDetailBinding.inflate(inflater, container, false).root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.screenName.text = screenLabel()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun screenLabel(): String =
