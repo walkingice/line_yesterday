@@ -2,6 +2,7 @@ package cc.jchu.naver.line.yesterday.feed
 
 import android.view.View
 import android.os.Looper
+import android.widget.ImageView
 import android.widget.FrameLayout
 import cc.jchu.naver.line.yesterday.data.domain.DummyJsonItem
 import cc.jchu.naver.line.yesterday.data.domain.FeedFooterState
@@ -48,5 +49,37 @@ class FeedAdapterTest {
         assertEquals(false, holder.itemView.findViewById<View>(
             cc.jchu.naver.line.yesterday.R.id.footer_button,
         ).isEnabled)
+    }
+
+    @Test
+    fun sourceRowsBindInformationAndImageViews() {
+        val adapter = FeedAdapter({}, {})
+        adapter.submitFeed(
+            listOf(
+                DummyJsonItem("1", "Product", "invalid-url", "beauty"),
+                SpaceFlightItem("2", "Article", "invalid-url", "Summary"),
+            ),
+            FeedFooterState.Ready,
+        )
+        shadowOf(Looper.getMainLooper()).idle()
+        val parent = FrameLayout(RuntimeEnvironment.getApplication())
+
+        val dummyHolder = adapter.onCreateViewHolder(parent, adapter.getItemViewType(0))
+        adapter.onBindViewHolder(dummyHolder, 0)
+        val spaceHolder = adapter.onCreateViewHolder(parent, adapter.getItemViewType(1))
+        adapter.onBindViewHolder(spaceHolder, 1)
+
+        assertEquals("Product", dummyHolder.itemView.findViewById<android.widget.TextView>(
+            cc.jchu.naver.line.yesterday.R.id.title,
+        ).text)
+        assertEquals("Summary", spaceHolder.itemView.findViewById<android.widget.TextView>(
+            cc.jchu.naver.line.yesterday.R.id.description,
+        ).text)
+        assertTrue(dummyHolder.itemView.findViewById<ImageView>(
+            cc.jchu.naver.line.yesterday.R.id.image,
+        ) != null)
+        assertTrue(spaceHolder.itemView.findViewById<ImageView>(
+            cc.jchu.naver.line.yesterday.R.id.image,
+        ) != null)
     }
 }

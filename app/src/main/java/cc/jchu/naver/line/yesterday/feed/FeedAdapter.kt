@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil3.asImage
+import coil3.load
 import cc.jchu.naver.line.yesterday.data.domain.DummyJsonItem
 import cc.jchu.naver.line.yesterday.data.domain.FeedFooterState
 import cc.jchu.naver.line.yesterday.data.domain.FeedItem
@@ -78,6 +80,10 @@ class FeedAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FeedItem) {
             val dummyItem = item as DummyJsonItem
+            binding.image.load(dummyItem.imgUrl) {
+                placeholder(binding.root.context.placeholderImage())
+                error(binding.root.context.placeholderImage())
+            }
             binding.title.text = dummyItem.title
             binding.category.text = dummyItem.category
             binding.root.setOnClickListener { onClick(dummyItem) }
@@ -90,6 +96,10 @@ class FeedAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FeedItem) {
             val spaceItem = item as SpaceFlightItem
+            binding.image.load(spaceItem.imgUrl) {
+                placeholder(binding.root.context.placeholderImage())
+                error(binding.root.context.placeholderImage())
+            }
             binding.title.text = spaceItem.title
             binding.description.text = spaceItem.description
             binding.root.setOnClickListener { onClick(spaceItem) }
@@ -138,5 +148,8 @@ class FeedAdapter(
             FeedFooterState.Error -> "Retry"
             FeedFooterState.Offline -> "Retry while online"
         }
+
+        fun android.content.Context.placeholderImage() =
+            getDrawable(cc.jchu.naver.line.yesterday.R.drawable.ic_launcher_foreground)?.asImage()
     }
 }
