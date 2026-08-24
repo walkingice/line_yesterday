@@ -1,6 +1,12 @@
 package cc.jchu.naver.line.yesterday.detail
 
 import android.content.Intent
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.FrameLayout
+import cc.jchu.naver.line.yesterday.data.domain.DataError
+import cc.jchu.naver.line.yesterday.data.domain.Detail
+import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.databinding.FragmentDetailBinding
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -8,9 +14,50 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class DetailActivityTest {
+    @Test
+    fun rendersLoadingAndDetailContent() {
+        val binding = FragmentDetailBinding.inflate(
+            LayoutInflater.from(RuntimeEnvironment.getApplication()),
+            FrameLayout(RuntimeEnvironment.getApplication()),
+            false,
+        )
+
+        renderDetailState(binding, DetailUiState(isLoading = true))
+
+        assertEquals(View.VISIBLE, binding.detailLoading.visibility)
+        assertEquals(View.GONE, binding.detailContent.visibility)
+
+        renderDetailState(binding, DetailUiState(detail = detail()))
+
+        assertEquals(View.GONE, binding.detailLoading.visibility)
+        assertEquals(View.VISIBLE, binding.detailContent.visibility)
+        assertEquals("Title", binding.detailTitle.text)
+        assertEquals("Description", binding.detailDescription.text)
+        assertEquals("Extra", binding.detailExtraInformation.text)
+    }
+
+    @Test
+    fun rendersErrorWithoutRemovingExistingDetail() {
+        val binding = FragmentDetailBinding.inflate(
+            LayoutInflater.from(RuntimeEnvironment.getApplication()),
+            FrameLayout(RuntimeEnvironment.getApplication()),
+            false,
+        )
+
+        renderDetailState(
+            binding,
+            DetailUiState(detail = detail(), error = DataError.Offline),
+        )
+
+        assertEquals(View.VISIBLE, binding.detailContent.visibility)
+        assertEquals(View.VISIBLE, binding.detailError.visibility)
+        assertEquals("Title", binding.detailTitle.text)
+    }
+
     @Test
     fun createsAndAttachesDetailFragment() {
         val intent = Intent().apply {
@@ -58,4 +105,13 @@ class DetailActivityTest {
         activity.onBackPressed()
         assertTrue(activity.isFinishing)
     }
+
+    private fun detail() = Detail(
+        id = "1",
+        source = FeedSource.DUMMY_JSON,
+        title = "Title",
+        imgUrl = "https://example.com/image.jpg",
+        description = "Description",
+        extraInformation = "Extra",
+    )
 }

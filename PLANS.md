@@ -712,7 +712,7 @@ Use Robolectric local JVM tests to verify:
 
 ### Implementation
 
-- [ ] The layout shows image, title, description, extra information, loading, and
+- [x] The layout shows image, title, description, extra information, loading, and
   error.
 - [ ] Keep stale detail visible after it appears. Update it when background refresh
   succeeds; provide a non-destructive error indication when refresh fails.
