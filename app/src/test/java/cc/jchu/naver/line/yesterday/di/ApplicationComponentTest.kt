@@ -18,5 +18,7 @@ class ApplicationComponentTest {
         assertSame(first, second)
         assertSame(context.applicationContext, first.applicationContext)
         assertSame(context, first.applicationContext)
+        assertSame(first.database, second.database)
+        assertSame(first.database.jsonCacheDao(), second.database.jsonCacheDao())
     }
 }

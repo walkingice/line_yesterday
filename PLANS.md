@@ -649,7 +649,7 @@ Use Robolectric local JVM tests to verify:
   `ComponentFactory` to manage the singleton dependency graph. Lich is responsible
   only for retrieving the component; objects inside it still use constructor
   injection.
-- [ ] Create and retain a single AppDatabase through that component.
+- [x] Create and retain a single AppDatabase through that component.
 - [ ] Create production TimeProvider, NetworkStatusProvider, Clients,
   Stores, and Repositories.
 - [ ] Create three ViewModel factories. Fragment retrieves a factory only through the
