@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.detail.DetailActivity
 import cc.jchu.naver.line.yesterday.data.domain.FeedFooterState
 import cc.jchu.naver.line.yesterday.data.domain.FeedItem
@@ -47,6 +49,9 @@ class FeedFragment : Fragment() {
             },
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.addItemDecoration(
+            FeedItemSpacingDecoration(resources.getDimensionPixelSize(R.dimen.feed_item_spacing)),
+        )
         binding.recyclerView.adapter = adapter
         binding.swipeRefresh.setOnRefreshListener { viewModel.refresh() }
         binding.screenName.apply {
@@ -61,6 +66,19 @@ class FeedFragment : Fragment() {
         }
     }
 
+}
+
+internal class FeedItemSpacingDecoration(
+    private val spacing: Int,
+) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: android.graphics.Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+    ) {
+        outRect.set(0, spacing, 0, 0)
+    }
 }
 
 internal fun detailIntentFor(
