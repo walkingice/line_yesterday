@@ -645,7 +645,7 @@ Use Robolectric local JVM tests to verify:
 
 ### Implementation
 
-- [ ] Create an application-level dependency component and use Lich
+- [x] Create an application-level dependency component and use Lich
   `ComponentFactory` to manage the singleton dependency graph. Lich is responsible
   only for retrieving the component; objects inside it still use constructor
   injection.
