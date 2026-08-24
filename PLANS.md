@@ -652,7 +652,7 @@ Use Robolectric local JVM tests to verify:
 - [x] Create and retain a single AppDatabase through that component.
 - [x] Create production TimeProvider, NetworkStatusProvider, Clients,
   Stores, and Repositories.
-- [ ] Create three ViewModel factories. Fragment retrieves a factory only through the
+- [x] Create three ViewModel factories. Fragment retrieves a factory only through the
   Lich component and does not manually instantiate Repository or Database.
 - [ ] The lifetimes of database, Store, and Repository must not be shorter than the
   ViewModels that use them.

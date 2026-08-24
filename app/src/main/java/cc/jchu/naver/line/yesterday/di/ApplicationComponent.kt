@@ -27,7 +27,12 @@ class ApplicationComponent private constructor(
     val spaceFlightRepository: SpaceFlightRepository,
     val detailRepository: DetailRepository,
     val favoritesRepository: FavoritesRepository,
+    val feedViewModelFactory: FeedViewModelFactory,
+    val favoritesViewModelFactory: FavoritesViewModelFactory,
 ) {
+    fun detailViewModelFactory(arguments: cc.jchu.naver.line.yesterday.detail.DetailArguments?) =
+        DetailViewModelFactory(arguments, detailRepository, favoritesRepository)
+
     companion object : ComponentFactory<ApplicationComponent>() {
         override fun createComponent(context: Context): ApplicationComponent {
             val applicationContext = context.applicationContext
@@ -50,6 +55,8 @@ class ApplicationComponent private constructor(
                 cacheStore = jsonCacheStore,
                 timeProvider = timeProvider,
             )
+            val detailRepository = DetailRepository(dummyJsonRepository, spaceFlightRepository)
+            val favoritesRepository = FavoritesRepository(favoriteStore, timeProvider)
             return ApplicationComponent(
                 applicationContext = applicationContext,
                 database = database,
@@ -57,8 +64,13 @@ class ApplicationComponent private constructor(
                 networkStatusProvider = networkStatusProvider,
                 dummyJsonRepository = dummyJsonRepository,
                 spaceFlightRepository = spaceFlightRepository,
-                detailRepository = DetailRepository(dummyJsonRepository, spaceFlightRepository),
-                favoritesRepository = FavoritesRepository(favoriteStore, timeProvider),
+                detailRepository = detailRepository,
+                favoritesRepository = favoritesRepository,
+                feedViewModelFactory = FeedViewModelFactory(
+                    dummyJsonRepository,
+                    spaceFlightRepository,
+                ),
+                favoritesViewModelFactory = FavoritesViewModelFactory(favoritesRepository),
             )
         }
 

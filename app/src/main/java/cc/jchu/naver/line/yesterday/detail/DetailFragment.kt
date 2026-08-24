@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cc.jchu.naver.line.yesterday.databinding.FragmentDetailBinding
+import cc.jchu.naver.line.yesterday.di.applicationComponent
 import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
 
 class DetailFragment : Fragment() {
     private val viewModel by lazy {
-        ViewModelProvider(this, DetailViewModel.Factory(detailArguments()))[
+        ViewModelProvider(this, requireContext().applicationComponent().detailViewModelFactory(detailArguments()))[
             DetailViewModel::class.java
         ]
     }

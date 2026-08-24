@@ -7,10 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cc.jchu.naver.line.yesterday.databinding.FragmentFavoritesBinding
+import cc.jchu.naver.line.yesterday.di.applicationComponent
 import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
 
 class FavoritesFragment : Fragment() {
-    private val viewModel by lazy { ViewModelProvider(this)[FavoritesViewModel::class.java] }
+    private val viewModel by lazy {
+        ViewModelProvider(this, requireContext().applicationComponent().favoritesViewModelFactory)[
+            FavoritesViewModel::class.java
+        ]
+    }
     private val binding by viewBinding(FragmentFavoritesBinding::bind)
 
     override fun onCreateView(

@@ -8,10 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cc.jchu.naver.line.yesterday.detail.DetailActivity
 import cc.jchu.naver.line.yesterday.databinding.FragmentFeedBinding
+import cc.jchu.naver.line.yesterday.di.applicationComponent
 import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
 
 class FeedFragment : Fragment() {
-    private val viewModel by lazy { ViewModelProvider(this)[FeedViewModel::class.java] }
+    private val viewModel by lazy {
+        ViewModelProvider(this, requireContext().applicationComponent().feedViewModelFactory)[
+            FeedViewModel::class.java
+        ]
+    }
     private val binding by viewBinding(FragmentFeedBinding::bind)
 
     override fun onCreateView(
