@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LINE Yesterday</string>
+    <string name="feed_screen_name">Feed</string>
 </resources>

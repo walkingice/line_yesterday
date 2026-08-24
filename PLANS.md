@@ -360,7 +360,7 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 - [ ] Create three sets of Activities, Fragments, layouts, and ViewModels.
 - [ ] Temporarily show only the screen name in each Fragment.
-- [ ] Use `FeedActivity` as the launcher Activity.
+- [x] Use `FeedActivity` as the launcher Activity.
 - [ ] The temporary Feed item action may use a fixed source/id to open Detail.
 - [ ] The Feed option menu can open Favorites.
 - [ ] Favorites has no option menu. Back finishes FavoritesActivity and returns to
