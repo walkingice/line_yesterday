@@ -613,7 +613,7 @@ Use Robolectric local JVM tests to verify:
   locally.
 - [x] When a newer Detail is loaded successfully, the ViewModel may update the snapshot
   if the item is already a Favorite, but it must preserve `addedAt`.
-- [ ] Prevent duplicate load and duplicate toggle operations.
+- [x] Prevent duplicate load and duplicate toggle operations.
 
 ### Step 6.2: FavoritesViewModel
 

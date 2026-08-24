@@ -61,11 +61,18 @@ class DetailViewModel(
         if (_uiState.value.isTogglingFavorite) return
         _uiState.value = _uiState.value.copy(isTogglingFavorite = true)
         viewModelScope.launch(dispatcher) {
-            val isFavorite = favorites.toggle(detail)
-            _uiState.value = _uiState.value.copy(
-                isFavorite = isFavorite,
-                isTogglingFavorite = false,
-            )
+            try {
+                val isFavorite = favorites.toggle(detail)
+                _uiState.value = _uiState.value.copy(
+                    isFavorite = isFavorite,
+                    isTogglingFavorite = false,
+                )
+            } catch (cause: Throwable) {
+                _uiState.value = _uiState.value.copy(
+                    isTogglingFavorite = false,
+                    error = DataError.Client(cause),
+                )
+            }
         }
     }
 

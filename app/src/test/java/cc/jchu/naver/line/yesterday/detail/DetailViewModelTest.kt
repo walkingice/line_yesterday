@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CompletableDeferred
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -158,6 +159,40 @@ class DetailViewModelTest {
         assertTrue(!viewModel.uiState.value.isFavorite)
     }
 
+    @Test
+    fun repeatedToggleDoesNotCreateDuplicateWork() {
+        val completion = CompletableDeferred<Boolean>()
+        val favorites = RecordingFavoriteReader(isFavorite = false, completion = completion)
+        val viewModel = DetailViewModel(
+            DetailArguments(FeedSource.DUMMY_JSON, "47"),
+            EventDetailReader(flowOf(DetailLoadEvent.Updated(detail()))),
+            Dispatchers.Unconfined,
+            favorites,
+        )
+
+        viewModel.toggleFavorite()
+        viewModel.toggleFavorite()
+
+        assertEquals(1, favorites.toggleCalls)
+        completion.complete(true)
+    }
+
+    @Test
+    fun toggleFailureLeavesToggleAvailable() {
+        val favorites = RecordingFavoriteReader(isFavorite = false, shouldFail = true)
+        val viewModel = DetailViewModel(
+            DetailArguments(FeedSource.DUMMY_JSON, "47"),
+            EventDetailReader(flowOf(DetailLoadEvent.Updated(detail()))),
+            Dispatchers.Unconfined,
+            favorites,
+        )
+
+        viewModel.toggleFavorite()
+
+        assertTrue(!viewModel.uiState.value.isTogglingFavorite)
+        assertTrue(viewModel.uiState.value.error is DataError.Client)
+    }
+
     private class RecordingDetailReader : DetailReader {
         var requests = 0
         var source: FeedSource? = null
@@ -189,6 +224,8 @@ class DetailViewModelTest {
 
     private class RecordingFavoriteReader(
         private var isFavorite: Boolean,
+        private val completion: CompletableDeferred<Boolean>? = null,
+        private val shouldFail: Boolean = false,
     ) : FavoriteReader {
         var toggleCalls = 0
         var snapshotUpdates = 0
@@ -197,6 +234,8 @@ class DetailViewModelTest {
 
         override suspend fun toggle(detail: Detail): Boolean {
             toggleCalls++
+            if (shouldFail) error("toggle failed")
+            completion?.await()?.let { return it }
             isFavorite = !isFavorite
             return isFavorite
         }
