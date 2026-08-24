@@ -315,13 +315,13 @@ refresh 前的 sequence 與 cursor。
 
 ### 實作
 
-- [ ] 建立三組 Activity、Fragment、layout 與 ViewModel。
-- [ ] 每個 Fragment 暫時只顯示畫面名稱。
-- [ ] `FeedActivity` 是 launcher Activity。
-- [ ] Feed 的暫時 item action 可以使用固定 source/id 開啟 Detail。
-- [ ] Feed option menu 可以開啟 Favorites。
-- [ ] Favorites 沒有 option menu，Back 會結束 FavoritesActivity 並回到 Feed。
-- [ ] Activity intent 只放 source 與 id；Detail 對缺少或不合法 argument 顯示錯誤
+- [x] 建立三組 Activity、Fragment、layout 與 ViewModel。
+- [x] 每個 Fragment 暫時只顯示畫面名稱。
+- [x] `FeedActivity` 是 launcher Activity。
+- [x] Feed 的暫時 item action 可以使用固定 source/id 開啟 Detail。
+- [x] Feed option menu 可以開啟 Favorites。
+- [x] Favorites 沒有 option menu，Back 會結束 FavoritesActivity 並回到 Feed。
+- [x] Activity intent 只放 source 與 id；Detail 對缺少或不合法 argument 顯示錯誤
   並允許使用者 Back，不 crash。
 
 ### 測試與驗證
