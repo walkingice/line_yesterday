@@ -447,8 +447,8 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 - [x] Save `addedAt`, title, imgUrl, description, and an extraInformation snapshot.
 - [x] `FavoriteDao` queries by `addedAt DESC`. For identical timestamps, sort by
   sourceType and then itemId to keep tests deterministic.
-- [ ] Create the `FavoriteStore` interface and Room-backed implementation.
-- [ ] When updating an existing Favorite snapshot, preserve its original `addedAt`.
+- [x] Create the `FavoriteStore` interface and Room-backed implementation.
+- [x] When updating an existing Favorite snapshot, preserve its original `addedAt`.
 
 ### Step 3.3: AppDatabase
 
