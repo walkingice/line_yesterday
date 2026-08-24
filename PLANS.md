@@ -452,10 +452,10 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 ### Step 3.3: AppDatabase
 
-- [ ] Create the application's only `AppDatabase`, providing both JsonCacheDao and
+- [x] Create the application's only `AppDatabase`, providing both JsonCacheDao and
   FavoriteDao.
-- [ ] Repository depends only on Store interfaces, not directly on AppDatabase or DAO.
-- [ ] Use database version 1 for this demo's initial schema. Do not create unused
+- [x] Repository depends only on Store interfaces, not directly on AppDatabase or DAO.
+- [x] Use database version 1 for this demo's initial schema. Do not create unused
   migrations in advance.
 
 ### Tests
