@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import cc.jchu.naver.line.yesterday.favorites.FavoritesActivity
 import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.databinding.ActivityFeedBinding
+import cc.jchu.naver.line.yesterday.view.applyTopAppBarInset
 
 class FeedActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFeedBinding
@@ -15,6 +16,7 @@ class FeedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFeedBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.fragmentContainer.applyTopAppBarInset()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

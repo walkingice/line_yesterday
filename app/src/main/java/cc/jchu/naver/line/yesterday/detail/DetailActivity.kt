@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.databinding.ActivityDetailBinding
+import cc.jchu.naver.line.yesterday.view.applyTopAppBarInset
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -19,6 +20,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.fragmentContainer.applyTopAppBarInset()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
