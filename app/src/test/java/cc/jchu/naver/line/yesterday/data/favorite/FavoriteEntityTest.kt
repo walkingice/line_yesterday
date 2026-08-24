@@ -19,8 +19,8 @@ class FavoriteEntityTest {
             FavoriteEntityDatabase::class.java,
         ).allowMainThreadQueries().build()
 
-        database.favoriteDao().insert(sample(sourceType = 1))
-        database.favoriteDao().insert(sample(sourceType = 2))
+        database.favoriteDao().upsert(sample(sourceType = 1))
+        database.favoriteDao().upsert(sample(sourceType = 2))
 
         assertEquals(2, database.favoriteDao().count())
         database.close()
@@ -39,22 +39,42 @@ class FavoriteEntityTest {
             extraInformation = "Extra",
         )
 
-        database.favoriteDao().insert(expected)
+        database.favoriteDao().upsert(expected)
 
         assertEquals(expected, database.favoriteDao().find(1, "same-id"))
         database.close()
     }
 
+    @Test
+    fun findAllOrdersNewestFirstWithDeterministicTieBreakers() = runBlocking {
+        val database = Room.inMemoryDatabaseBuilder(
+            RuntimeEnvironment.getApplication(),
+            FavoriteEntityDatabase::class.java,
+        ).allowMainThreadQueries().build()
+
+        database.favoriteDao().upsert(sample(sourceType = 2).copy(addedAt = 20L))
+        database.favoriteDao().upsert(sample(sourceType = 1).copy(addedAt = 20L))
+        database.favoriteDao().upsert(sample(itemId = "older", addedAt = 10L))
+
+        assertEquals(
+            listOf(1 to "same-id", 2 to "same-id", 1 to "older"),
+            database.favoriteDao().findAll().map { it.sourceType to it.itemId },
+        )
+        database.close()
+    }
+
     private fun sample(
         sourceType: Int = 1,
+        itemId: String = "same-id",
+        addedAt: Long = 10L,
         title: String = "title",
         imgUrl: String = "img",
         description: String = "description",
         extraInformation: String = "extra",
     ) = FavoriteEntity(
         sourceType = sourceType,
-        itemId = "same-id",
-        addedAt = 10L,
+        itemId = itemId,
+        addedAt = addedAt,
         title = title,
         imgUrl = imgUrl,
         description = description,
@@ -62,19 +82,7 @@ class FavoriteEntityTest {
     )
 }
 
-@androidx.room.Dao
-interface FavoriteEntityDao {
-    @androidx.room.Insert
-    suspend fun insert(entity: FavoriteEntity)
-
-    @androidx.room.Query("SELECT COUNT(*) FROM favorite")
-    suspend fun count(): Int
-
-    @androidx.room.Query("SELECT * FROM favorite WHERE sourceType = :sourceType AND itemId = :itemId")
-    suspend fun find(sourceType: Int, itemId: String): FavoriteEntity?
-}
-
 @Database(entities = [FavoriteEntity::class], version = 1, exportSchema = false)
 abstract class FavoriteEntityDatabase : RoomDatabase() {
-    abstract fun favoriteDao(): FavoriteEntityDao
+    abstract fun favoriteDao(): FavoriteDao
 }
