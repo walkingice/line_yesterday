@@ -335,7 +335,7 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
   the corresponding Lich component test helper. Do not add other unused Lich
   modules.
 - [x] Configure the local JVM test source set and Robolectric resources.
-- [ ] Decide minSdk, targetSdk, application id, Java/Kotlin toolchain, and dependency
+- [x] Decide minSdk, targetSdk, application id, Java/Kotlin toolchain, and dependency
   versions. Keep them centralized in a version catalog or consistent Gradle
   configuration.
 - [x] Add fixtures for four endpoints under `assets`: DummyJson Feed, DummyJson Detail,
