@@ -678,7 +678,7 @@ Use Robolectric local JVM tests to verify:
 
 ### Implementation
 
-- [ ] Create SwipeRefreshLayout, RecyclerView, empty-content/initial-loading, and error
+- [x] Create SwipeRefreshLayout, RecyclerView, empty-content/initial-loading, and error
   views.
 - [ ] Use one adapter supporting three view types: DummyJson item, SpaceFlight item,
   and footer state button.

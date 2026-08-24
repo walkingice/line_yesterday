@@ -1,6 +1,7 @@
 package cc.jchu.naver.line.yesterday.feed
 
 import androidx.appcompat.view.menu.MenuBuilder
+import android.view.View
 import cc.jchu.naver.line.yesterday.databinding.FragmentFeedBinding
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -12,6 +13,20 @@ import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
 class FeedActivityTest {
+    @Test
+    fun feedLayoutContainsContentAndStateViews() {
+        val activity = Robolectric.buildActivity(FeedActivity::class.java).setup().get()
+        val binding = FragmentFeedBinding.bind(
+            checkNotNull(activity.supportFragmentManager.fragments.single().view),
+        )
+
+        assertEquals(View.VISIBLE, binding.swipeRefresh.visibility)
+        assertEquals(View.VISIBLE, binding.recyclerView.visibility)
+        assertEquals(View.GONE, binding.initialLoading.visibility)
+        assertEquals(View.GONE, binding.emptyContent.visibility)
+        assertEquals(View.GONE, binding.errorContent.visibility)
+    }
+
     @Test
     fun createsAndAttachesFeedFragment() {
         val activity = Robolectric.buildActivity(FeedActivity::class.java).setup().get()
