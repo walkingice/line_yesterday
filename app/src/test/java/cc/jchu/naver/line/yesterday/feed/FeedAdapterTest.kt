@@ -11,10 +11,11 @@ import cc.jchu.naver.line.yesterday.data.domain.SpaceFlightItem
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
-import org.junit.runner.RunWith
+import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
 class FeedAdapterTest {
@@ -35,6 +36,26 @@ class FeedAdapterTest {
         assertEquals(2, adapter.getItemViewType(1))
         assertEquals(3, adapter.getItemViewType(2))
         assertTrue(adapter.getItemId(0) != adapter.getItemId(1))
+    }
+
+    @Test
+    fun invokesCommitCallbackAfterUpdatingItems() {
+        val executor = QueuedExecutor()
+        val adapter = FeedAdapter({}, {}, executor)
+        var itemCountWhenCommitted = 0
+
+        adapter.submitFeed(emptyList(), FeedFooterState.Loading)
+        shadowOf(Looper.getMainLooper()).idle()
+        adapter.submitFeed(
+            listOf(DummyJsonItem("1", "Product", "", "beauty")),
+            FeedFooterState.Ready,
+        ) {
+            itemCountWhenCommitted = adapter.itemCount
+        }
+        executor.runNext()
+        shadowOf(Looper.getMainLooper()).idle()
+
+        assertEquals(2, itemCountWhenCommitted)
     }
 
     @Test
@@ -107,6 +128,18 @@ class FeedAdapterTest {
 
             assertEquals(expectedValues.first, button.text)
             assertEquals(expectedValues.second, button.isEnabled)
+        }
+    }
+
+    private class QueuedExecutor : Executor {
+        private val tasks = mutableListOf<Runnable>()
+
+        override fun execute(command: Runnable) {
+            tasks += command
+        }
+
+        fun runNext() {
+            tasks.removeFirst().run()
         }
     }
 }
