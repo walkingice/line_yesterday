@@ -684,7 +684,7 @@ Use Robolectric local JVM tests to verify:
   and footer state button.
 - [x] Item layouts show title, source-specific information, and a Coil image.
 - [x] Use stable `(source, id)` identity and DiffUtil.
-- [ ] Collect `FeedUiState` in a lifecycle-aware manner. Rendering must not modify
+- [x] Collect `FeedUiState` in a lifecycle-aware manner. Rendering must not modify
   ViewModel state directly.
 - [ ] Pull-to-refresh calls `refresh()`. Depending on state, the footer button calls
   load more or retry.
