@@ -607,7 +607,7 @@ Use Robolectric local JVM tests to verify:
   input.
 - [x] Start Detail loading only when the screen opens for the first time.
 - [x] Collect `DetailLoadEvent` while preserving any stale detail already displayed.
-- [ ] When no detail exists, Offline/Error states show a retry action. When stale
+- [x] When no detail exists, Offline/Error states show a retry action. When stale
   detail exists, a refresh failure does not clear the content.
 - [ ] Query Favorite state at the same time. Toggle writes the current Detail snapshot
   locally.

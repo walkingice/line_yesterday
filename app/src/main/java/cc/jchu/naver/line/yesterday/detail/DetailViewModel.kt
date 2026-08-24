@@ -53,6 +53,11 @@ class DetailViewModel(
     val isArgumentsValid: Boolean
         get() = detailArguments != null
 
+    fun retry() {
+        if (!isArgumentsValid || detailReader == null || _uiState.value.isLoading) return
+        startLoad()
+    }
+
     class Factory(
         private val detailArguments: DetailArguments?,
         private val detailReader: DetailReader? = null,
@@ -64,7 +69,11 @@ class DetailViewModel(
     }
 
     private fun startInitialLoad() {
-        _uiState.value = _uiState.value.copy(isLoading = true)
+        startLoad()
+    }
+
+    private fun startLoad() {
+        _uiState.value = _uiState.value.copy(isLoading = true, error = null)
         val arguments = checkNotNull(detailArguments)
         val reader = checkNotNull(detailReader)
         viewModelScope.launch(dispatcher) {
@@ -100,4 +109,7 @@ data class DetailUiState(
     val isLoading: Boolean = false,
     val detail: Detail? = null,
     val error: DataError? = null,
-)
+) {
+    val canRetry: Boolean
+        get() = detail == null && error != null && !isLoading
+}

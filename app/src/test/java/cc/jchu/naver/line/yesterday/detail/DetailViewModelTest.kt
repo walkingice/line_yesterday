@@ -8,6 +8,7 @@ import cc.jchu.naver.line.yesterday.data.repository.DetailReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.Flow
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -102,6 +103,42 @@ class DetailViewModelTest {
         assertTrue(!viewModel.uiState.value.isLoading)
     }
 
+    @Test
+    fun failedInitialLoadExposesRetry() {
+        val reader = QueuedDetailReader(
+            listOf(
+                flowOf(DetailLoadEvent.LoadFailed(DataError.Offline)),
+                flowOf(DetailLoadEvent.Updated(detail())),
+            ),
+        )
+        val viewModel = DetailViewModel(
+            DetailArguments(FeedSource.DUMMY_JSON, "47"),
+            reader,
+            Dispatchers.Unconfined,
+        )
+
+        assertTrue(viewModel.uiState.value.canRetry)
+        viewModel.retry()
+
+        assertEquals(2, reader.requests)
+        assertTrue(!viewModel.uiState.value.canRetry)
+        assertEquals("47", viewModel.uiState.value.detail?.id)
+    }
+
+    @Test
+    fun retryDoesNotStartWhileLoading() {
+        val reader = QueuedDetailReader(listOf(kotlinx.coroutines.flow.flow { }))
+        val viewModel = DetailViewModel(
+            DetailArguments(FeedSource.DUMMY_JSON, "47"),
+            reader,
+            Dispatchers.Unconfined,
+        )
+
+        viewModel.retry()
+
+        assertEquals(1, reader.requests)
+    }
+
     private class RecordingDetailReader : DetailReader {
         var requests = 0
         var source: FeedSource? = null
@@ -116,9 +153,19 @@ class DetailViewModelTest {
     }
 
     private class EventDetailReader(
-        private val events: kotlinx.coroutines.flow.Flow<DetailLoadEvent>,
+        private val events: Flow<DetailLoadEvent>,
     ) : DetailReader {
         override fun getDetail(source: FeedSource, id: String) = events
+    }
+
+    private class QueuedDetailReader(
+        private val eventFlows: List<Flow<DetailLoadEvent>>,
+    ) : DetailReader {
+        var requests = 0
+
+        override fun getDetail(source: FeedSource, id: String): Flow<DetailLoadEvent> {
+            return eventFlows[requests++].also { }
+        }
     }
 
     private fun detail() = Detail(
