@@ -399,7 +399,7 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 - [x] Create API DTOs from the four fixture types.
 - [x] Create Gson parsers and DTO-to-domain mappers. Do not put Gson annotations in
   domain models.
-- [ ] The Feed parser produces items together with the next cursor/exhausted
+- [x] The Feed parser produces items together with the next cursor/exhausted
   information.
 - [ ] Test valid JSON, empty pages, last pages, malformed JSON, missing required fields,
   the same id from different sources, and duplicate ids.
