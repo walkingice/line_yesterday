@@ -50,12 +50,28 @@ class DetailActivityTest {
 
         renderDetailState(
             binding,
-            DetailUiState(detail = detail(), error = DataError.Offline),
+            DetailUiState(detail = detail(), isLoading = true, error = DataError.Offline),
         )
 
         assertEquals(View.VISIBLE, binding.detailContent.visibility)
+        assertEquals(View.GONE, binding.detailLoading.visibility)
         assertEquals(View.VISIBLE, binding.detailError.visibility)
         assertEquals("Title", binding.detailTitle.text)
+    }
+
+    @Test
+    fun rendersUpdatedDetailAfterStaleContent() {
+        val binding = FragmentDetailBinding.inflate(
+            LayoutInflater.from(RuntimeEnvironment.getApplication()),
+            FrameLayout(RuntimeEnvironment.getApplication()),
+            false,
+        )
+
+        renderDetailState(binding, DetailUiState(detail = detail()))
+        renderDetailState(binding, DetailUiState(detail = detail().copy(title = "Updated")))
+
+        assertEquals("Updated", binding.detailTitle.text)
+        assertEquals(View.VISIBLE, binding.detailContent.visibility)
     }
 
     @Test
