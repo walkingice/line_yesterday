@@ -378,33 +378,33 @@ refresh 前的 sequence 與 cursor。
 
 ### Step 3.1：Json cache persistence
 
-- [ ] 建立 `JsonCacheEntity`，包含 auto-generated `_id`、timestamp、type、key 與
+- [x] 建立 `JsonCacheEntity`，包含 auto-generated `_id`、timestamp、type、key 與
   `jsonString`。Store interface 將 `jsonString` 暴露為語意較清楚的 `rawJson`。
-- [ ] 固定使用以下 `CacheType` mapping，不可依 enum ordinal 自動產生 database
+- [x] 固定使用以下 `CacheType` mapping，不可依 enum ordinal 自動產生 database
   value：`1 = DummyJsonFeed`、`2 = SpaceFlightFeed`、
   `3 = DummyJsonDetail`、`4 = SpaceFlightDetail`。
-- [ ] 對 `(type, key)` 建立 unique index。
-- [ ] 建立 `JsonCacheDao`，提供 query、atomic upsert、指定刪除與清除全部 API
+- [x] 對 `(type, key)` 建立 unique index。
+- [x] 建立 `JsonCacheDao`，提供 query、atomic upsert、指定刪除與清除全部 API
   cache。
-- [ ] 建立 `JsonCacheStore` interface 與 Room-backed implementation。
-- [ ] `replaceFeedPages` 使用 Room transaction，先 upsert 新第一頁，再刪除同一
+- [x] 建立 `JsonCacheStore` interface 與 Room-backed implementation。
+- [x] `replaceFeedPages` 使用 Room transaction，先 upsert 新第一頁，再刪除同一
   Feed type 的其他 key；任何一步失敗都 rollback。
-- [ ] Store 不 import Gson DTO 或 domain model。
+- [x] Store 不 import Gson DTO 或 domain model。
 
 ### Step 3.2：Favorite persistence
 
-- [ ] 建立 `FavoriteEntity`，以 `(sourceType, itemId)` 為 composite primary key。
-- [ ] 保存 `addedAt`、title、imgUrl、description 與 extraInformation snapshot。
-- [ ] `FavoriteDao` 依 `addedAt DESC` 查詢；相同 timestamp 時再依 sourceType、
+- [x] 建立 `FavoriteEntity`，以 `(sourceType, itemId)` 為 composite primary key。
+- [x] 保存 `addedAt`、title、imgUrl、description 與 extraInformation snapshot。
+- [x] `FavoriteDao` 依 `addedAt DESC` 查詢；相同 timestamp 時再依 sourceType、
   itemId 排序，確保測試 deterministic。
-- [ ] 建立 `FavoriteStore` interface 與 Room-backed implementation。
-- [ ] 更新既有 Favorite snapshot 時保留原本的 `addedAt`。
+- [x] 建立 `FavoriteStore` interface 與 Room-backed implementation。
+- [x] 更新既有 Favorite snapshot 時保留原本的 `addedAt`。
 
 ### Step 3.3：AppDatabase
 
-- [ ] 建立 app 唯一的 `AppDatabase`，同時提供 JsonCacheDao 與 FavoriteDao。
-- [ ] Repository 只依賴 Store interface，不直接依賴 AppDatabase 或 DAO。
-- [ ] 本 demo 的初始 schema 使用 database version 1；不預先建立無用途 migration。
+- [x] 建立 app 唯一的 `AppDatabase`，同時提供 JsonCacheDao 與 FavoriteDao。
+- [x] Repository 只依賴 Store interface，不直接依賴 AppDatabase 或 DAO。
+- [x] 本 demo 的初始 schema 使用 database version 1；不預先建立無用途 migration。
 
 ### 測試
 
@@ -429,58 +429,58 @@ refresh 前的 sequence 與 cursor。
 
 ### Step 4.1：Freshness 與 cache policy
 
-- [ ] 實作 `FreshnessValidator`，注入 freshness duration 與 `TimeProvider`。
-- [ ] 決定並以常數保存實際 freshness duration。
-- [ ] `age = maxOf(0, now - timestamp)`；`age < duration` 才 fresh，剛好等於
+- [x] 實作 `FreshnessValidator`，注入 freshness duration 與 `TimeProvider`。
+- [x] 決定並以常數保存實際 freshness duration。
+- [x] `age = maxOf(0, now - timestamp)`；`age < duration` 才 fresh，剛好等於
   duration 已過期，未來 timestamp 視為 age 0。
-- [ ] 明確測試 timestamp 未過期、剛好到 boundary、已過期與未來 timestamp。
-- [ ] 將 fresh hit、miss、stale hit、forced refresh、parse failure 與 write failure
+- [x] 明確測試 timestamp 未過期、剛好到 boundary、已過期與未來 timestamp。
+- [x] 將 fresh hit、miss、stale hit、forced refresh、parse failure 與 write failure
   流程封裝成小型 helper，避免兩個來源複製整段流程。
-- [ ] Feed Repository 公開 API 只接收 cursor 與 `forceRefresh`。內部使用
+- [x] Feed Repository 公開 API 只接收 cursor 與 `forceRefresh`。內部使用
   `NORMAL`、`FORCE_REFRESH_FIRST_PAGE`、`NETWORK_ONLY_RECOVERY` 三種 cache
   mode；ViewModel 不知道 mode 或 recovery flag。
 
 ### Step 4.2：DummyJsonRepository
 
-- [ ] 實作 Feed page 與 Detail loading。
-- [ ] 使用 DummyJson parser／mapper，不對外公開 DTO。
-- [ ] 支援 `forceRefresh` 取得第一頁，但不預先刪除 cache。
-- [ ] successful refresh 使用 `replaceFeedPages`；transaction failure 回傳新資料、
+- [x] 實作 Feed page 與 Detail loading。
+- [x] 使用 DummyJson parser／mapper，不對外公開 DTO。
+- [x] 支援 `forceRefresh` 取得第一頁，但不預先刪除 cache。
+- [x] successful refresh 使用 `replaceFeedPages`；transaction failure 回傳新資料、
   `cacheWarning`，並在 Repository 內進入 `NETWORK_ONLY_RECOVERY`。
-- [ ] recovery mode 的 Client failure 不 fallback stale cache，Client success 也不
+- [x] recovery mode 的 Client failure 不 fallback stale cache，Client success 也不
   寫 page cache；只有後續 first-page refresh transaction 成功才恢復 NORMAL。
-- [ ] cache read failure 後仍嘗試 Client；Client 成功可顯示資料，Client 也失敗時
+- [x] cache read failure 後仍嘗試 Client；Client 成功可顯示資料，Client 也失敗時
   以包含 Storage 的 `loadFailure` 回傳 Error。
-- [ ] 依本文件的 stale 與 cache write failure 決策回傳結果。
-- [ ] 加入 fresh、miss、stale success、stale offline、stale failure、forced refresh、
+- [x] 依本文件的 stale 與 cache write failure 決策回傳結果。
+- [x] 加入 fresh、miss、stale success、stale offline、stale failure、forced refresh、
   malformed cache、malformed Client JSON、cache read failure 與 cache write failure
   tests。
-- [ ] 測試 recovery mode 完全不讀／不寫 page cache、Client failure 不 stale
+- [x] 測試 recovery mode 完全不讀／不寫 page cache、Client failure 不 stale
   fallback、Repository 重建只讀到完整舊 generation，以及下一次 refresh
   transaction 成功後恢復 NORMAL。
 
 ### Step 4.3：SpaceFlightRepository
 
-- [ ] 實作與 DummyJson 相同的 policy，但使用 SpaceFlight schema 與 cursor。
-- [ ] 不複製 DummyJson 專屬 DTO 或 mapper。
-- [ ] 執行與 Step 4.2 對稱的測試矩陣，另測 `next` 為 null 的 exhausted 判斷。
+- [x] 實作與 DummyJson 相同的 policy，但使用 SpaceFlight schema 與 cursor。
+- [x] 不複製 DummyJson 專屬 DTO 或 mapper。
+- [x] 執行與 Step 4.2 對稱的測試矩陣，另測 `next` 為 null 的 exhausted 判斷。
 
 ### Step 4.4：DetailRepository router
 
-- [ ] 只依 `FeedSource` 與 id 導向對應 source repository。
-- [ ] 使用 `Flow<DetailLoadEvent>` 表達 cached、updated、refresh failed 與 load
+- [x] 只依 `FeedSource` 與 id 導向對應 source repository。
+- [x] 使用 `Flow<DetailLoadEvent>` 表達 cached、updated、refresh failed 與 load
   failed。
-- [ ] 測試每種 source routing、fresh cache 單次 emission、stale cache 兩階段
+- [x] 測試每種 source routing、fresh cache 單次 emission、stale cache 兩階段
   emission、無 cache offline 與 retry。
 
 ### Step 4.5：FavoritesRepository
 
-- [ ] 使用 `FavoriteStore` 實作 `isFavorite`、add、remove、toggle、query 與
+- [x] 使用 `FavoriteStore` 實作 `isFavorite`、add、remove、toggle、query 與
   snapshot update。
-- [ ] add 時透過 `TimeProvider` 產生 `addedAt`。
-- [ ] toggle 與 API network 完全無關。
-- [ ] 使用 limit／offset 或等價介面支援每次五筆的列表分頁。
-- [ ] 測試新增、移除、重複 add、排序、五筆分頁、最後一頁、snapshot update 保留
+- [x] add 時透過 `TimeProvider` 產生 `addedAt`。
+- [x] toggle 與 API network 完全無關。
+- [x] 使用 limit／offset 或等價介面支援每次五筆的列表分頁。
+- [x] 測試新增、移除、重複 add、排序、五筆分頁、最後一頁、snapshot update 保留
   `addedAt`，以及任何 network state 都不影響本機操作。
 
 ### 完成條件
@@ -493,18 +493,18 @@ refresh 前的 sequence 與 cursor。
 
 ### 實作
 
-- [ ] 建立 immutable `FeedUiState` 與 private mutable state。
-- [ ] 初始化時自動同時取得兩個來源的第一頁。
-- [ ] 分別保存兩個 source 的完整序列、cursor 與 exhausted 狀態。
-- [ ] 使用兩個 child coroutine 同時讀取未 exhausted 的來源，再一起 evaluate。
-- [ ] 成功來源可獨立更新並前進；失敗來源保留 cursor，下次重試同一頁。
-- [ ] exhausted source 不建立 request。
-- [ ] 用純函式完成 deduplication 與 deterministic alternating merge。
-- [ ] `loadMoreItems()` 在 Loading、refreshing 或 NoMoreItems 時立即 return。
-- [ ] `refresh()` 在 load more 或 refresh 執行中立即 return。
-- [ ] refresh 對兩個來源強制讀第一頁。成功來源替換自己的完整序列與 cursor；
+- [x] 建立 immutable `FeedUiState` 與 private mutable state。
+- [x] 初始化時自動同時取得兩個來源的第一頁。
+- [x] 分別保存兩個 source 的完整序列、cursor 與 exhausted 狀態。
+- [x] 使用兩個 child coroutine 同時讀取未 exhausted 的來源，再一起 evaluate。
+- [x] 成功來源可獨立更新並前進；失敗來源保留 cursor，下次重試同一頁。
+- [x] exhausted source 不建立 request。
+- [x] 用純函式完成 deduplication 與 deterministic alternating merge。
+- [x] `loadMoreItems()` 在 Loading、refreshing 或 NoMoreItems 時立即 return。
+- [x] `refresh()` 在 load more 或 refresh 執行中立即 return。
+- [x] refresh 對兩個來源強制讀第一頁。成功來源替換自己的完整序列與 cursor；
   失敗來源保留原 sequence、cursor 與 exhausted 狀態。
-- [ ] 分別使用 load-more 與 refresh failure matrix 計算 footer state。
+- [x] 分別使用 load-more 與 refresh failure matrix 計算 footer state。
 
 ### 測試
 
@@ -530,24 +530,24 @@ refresh 前的 sequence 與 cursor。
 
 ### Step 6.1：DetailViewModel
 
-- [ ] 從 saved state／建立參數取得 `FeedSource` 與 id，並驗證輸入。
-- [ ] 畫面第一次開啟時才開始 Detail load。
-- [ ] 收集 `DetailLoadEvent` 並保留已顯示的 stale detail。
-- [ ] 沒有 detail 時，Offline／Error 顯示 retry；已有 stale detail 時，refresh
+- [x] 從 saved state／建立參數取得 `FeedSource` 與 id，並驗證輸入。
+- [x] 畫面第一次開啟時才開始 Detail load。
+- [x] 收集 `DetailLoadEvent` 並保留已顯示的 stale detail。
+- [x] 沒有 detail 時，Offline／Error 顯示 retry；已有 stale detail 時，refresh
   failure 不清空內容。
-- [ ] 同時查詢 Favorite 狀態；toggle 使用目前 Detail snapshot 寫入本機。
-- [ ] 成功取得新版 Detail 時，如果該項目已是 Favorite，可以更新 snapshot，但
+- [x] 同時查詢 Favorite 狀態；toggle 使用目前 Detail snapshot 寫入本機。
+- [x] 成功取得新版 Detail 時，如果該項目已是 Favorite，可以更新 snapshot，但
   必須保留 `addedAt`。
-- [ ] 阻止重複 load 與重複 toggle 操作。
+- [x] 阻止重複 load 與重複 toggle 操作。
 
 ### Step 6.2：FavoritesViewModel
 
-- [ ] 第一次顯示五筆，`loadMoreItems()` 每次增加五筆可見資料。
-- [ ] 全部顯示後進入 NoMoreItems；空列表也視為沒有更多項目。
-- [ ] 每次 Fragment 回到 resumed 狀態時呼叫 refresh，透過
+- [x] 第一次顯示五筆，`loadMoreItems()` 每次增加五筆可見資料。
+- [x] 全部顯示後進入 NoMoreItems；空列表也視為沒有更多項目。
+- [x] 每次 Fragment 回到 resumed 狀態時呼叫 refresh，透過
   FavoritesRepository 重讀資料，以反映 Detail 畫面的 toggle。
-- [ ] refresh 後保留合理的 visible limit，但不可超過目前總數。
-- [ ] Favorite 是本機操作，不因 offline 顯示 Offline。
+- [x] refresh 後保留合理的 visible limit，但不可超過目前總數。
+- [x] Favorite 是本機操作，不因 offline 顯示 Offline。
 
 ### 測試
 
@@ -567,16 +567,16 @@ refresh 前的 sequence 與 cursor。
 
 ### 實作
 
-- [ ] 建立 application-level dependency component，使用 Lich `ComponentFactory`
+- [x] 建立 application-level dependency component，使用 Lich `ComponentFactory`
   管理 singleton dependency graph；Lich 只負責取得 component，內部物件仍使用
   constructor injection。
-- [ ] 由該 component 建立並持有單一 AppDatabase。
-- [ ] 建立 production TimeProvider、NetworkStatusProvider、Clients、
+- [x] 由該 component 建立並持有單一 AppDatabase。
+- [x] 建立 production TimeProvider、NetworkStatusProvider、Clients、
   Stores 與 Repositories。
-- [ ] 建立三個 ViewModel factories；Fragment 只透過 Lich component 取得 factory，
+- [x] 建立三個 ViewModel factories；Fragment 只透過 Lich component 取得 factory，
   不手動 new Repository 或 Database。
-- [ ] database、Store 與 Repository 的生命週期不得短於使用它們的 ViewModel。
-- [ ] mock network 狀態應有 demo app 可控制的來源，並保留未來替換成真實實作的
+- [x] database、Store 與 Repository 的生命週期不得短於使用它們的 ViewModel。
+- [x] mock network 狀態應有 demo app 可控制的來源，並保留未來替換成真實實作的
   interface boundary。
 
 ### 測試與驗證
@@ -597,17 +597,17 @@ refresh 前的 sequence 與 cursor。
 
 ### 實作
 
-- [ ] 建立 SwipeRefreshLayout、RecyclerView、空內容／initial loading 與錯誤畫面。
-- [ ] 使用單一 adapter 支援 DummyJson item、SpaceFlight item 與 footer state
+- [x] 建立 SwipeRefreshLayout、RecyclerView、空內容／initial loading 與錯誤畫面。
+- [x] 使用單一 adapter 支援 DummyJson item、SpaceFlight item 與 footer state
   button 三種 view type。
-- [ ] item layout 顯示 title、source-specific information 與 Coil image。
-- [ ] 使用 stable `(source, id)` identity 與 DiffUtil。
-- [ ] lifecycle-aware 收集 `FeedUiState`，render 時不直接修改 ViewModel state。
-- [ ] pull-to-refresh 呼叫 `refresh()`；footer button 依狀態呼叫 load more 或 retry。
-- [ ] `Ready`、`Loading`、`NoMoreItems`、`Error`、`Offline` 都有明確文案與 enabled
+- [x] item layout 顯示 title、source-specific information 與 Coil image。
+- [x] 使用 stable `(source, id)` identity 與 DiffUtil。
+- [x] lifecycle-aware 收集 `FeedUiState`，render 時不直接修改 ViewModel state。
+- [x] pull-to-refresh 呼叫 `refresh()`；footer button 依狀態呼叫 load more 或 retry。
+- [x] `Ready`、`Loading`、`NoMoreItems`、`Error`、`Offline` 都有明確文案與 enabled
   狀態。
-- [ ] 點擊 item 只傳 source 與 id 到 DetailActivity。
-- [ ] option menu 開啟 FavoritesActivity。
+- [x] 點擊 item 只傳 source 與 id 到 DetailActivity。
+- [x] option menu 開啟 FavoritesActivity。
 
 ### 驗證
 
@@ -627,12 +627,12 @@ refresh 前的 sequence 與 cursor。
 
 ### 實作
 
-- [ ] layout 顯示 image、title、description、extra information、loading 與 error。
-- [ ] stale detail 出現後保持可見，背景 refresh 成功時更新；失敗時提供
+- [x] layout 顯示 image、title、description、extra information、loading 與 error。
+- [x] stale detail 出現後保持可見，背景 refresh 成功時更新；失敗時提供
   非破壞性的 error indication。
-- [ ] 無 cache 的 Offline／Error state 提供 retry action。
-- [ ] favorite icon render 當前狀態；操作期間避免重複點擊，成功後更新 icon。
-- [ ] invalid source/id 顯示錯誤並允許 Back，不 crash。
+- [x] 無 cache 的 Offline／Error state 提供 retry action。
+- [x] favorite icon render 當前狀態；操作期間避免重複點擊，成功後更新 icon。
+- [x] invalid source/id 顯示錯誤並允許 Back，不 crash。
 
 ### 驗證
 
