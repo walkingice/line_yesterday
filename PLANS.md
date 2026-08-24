@@ -490,58 +490,58 @@ Use Robolectric local JVM tests to verify:
   timestamps have age 0.
 - [x] Explicitly test timestamps before expiration, exactly at the boundary, after
   expiration, and in the future.
-- [ ] Encapsulate fresh hit, miss, stale hit, forced refresh, parse failure, and write
+- [x] Encapsulate fresh hit, miss, stale hit, forced refresh, parse failure, and write
   failure flows in small helpers so the two sources do not duplicate the entire
   flow.
-- [ ] The public Feed Repository API accepts only cursor and `forceRefresh`. Internally,
+- [x] The public Feed Repository API accepts only cursor and `forceRefresh`. Internally,
   it uses the three cache modes `NORMAL`, `FORCE_REFRESH_FIRST_PAGE`, and
   `NETWORK_ONLY_RECOVERY`; ViewModel does not know about the modes or recovery flag.
 
 ### Step 4.2: DummyJsonRepository
 
-- [ ] Implement Feed page and Detail loading.
-- [ ] Use the DummyJson parser/mapper without exposing DTOs.
-- [ ] Support `forceRefresh` to obtain the first page, but do not delete cache first.
-- [ ] A successful refresh uses `replaceFeedPages`. If the transaction fails, return
+- [x] Implement Feed page and Detail loading.
+- [x] Use the DummyJson parser/mapper without exposing DTOs.
+- [x] Support `forceRefresh` to obtain the first page, but do not delete cache first.
+- [x] A successful refresh uses `replaceFeedPages`. If the transaction fails, return
   new data with `cacheWarning` and enter `NETWORK_ONLY_RECOVERY` inside Repository.
-- [ ] In recovery mode, a Client failure does not fall back to stale cache, and Client
+- [x] In recovery mode, a Client failure does not fall back to stale cache, and Client
   success does not write page cache. Return to NORMAL only after a later first-page
   refresh transaction succeeds.
-- [ ] Still try Client after a cache read failure. If Client succeeds, display the
+- [x] Still try Client after a cache read failure. If Client succeeds, display the
   data. If Client also fails, return Error through a `loadFailure` that includes
   Storage.
-- [ ] Return results according to this document's stale and cache-write-failure
+- [x] Return results according to this document's stale and cache-write-failure
   decisions.
-- [ ] Add tests for fresh, miss, stale success, stale offline, stale failure, forced
+- [x] Add tests for fresh, miss, stale success, stale offline, stale failure, forced
   refresh, malformed cache, malformed Client JSON, cache read failure, and cache
   write failure.
-- [ ] Test that recovery mode never reads/writes page cache, a Client failure does not
+- [x] Test that recovery mode never reads/writes page cache, a Client failure does not
   fall back to stale data, recreating the Repository reads only the complete old
   generation, and a successful transaction on the next refresh restores NORMAL.
 
 ### Step 4.3: SpaceFlightRepository
 
-- [ ] Implement the same policy as DummyJson, using the SpaceFlight schema and cursor.
-- [ ] Do not duplicate DummyJson-specific DTOs or mappers.
-- [ ] Run the test matrix symmetric with Step 4.2, plus test the exhausted decision when
+- [x] Implement the same policy as DummyJson, using the SpaceFlight schema and cursor.
+- [x] Do not duplicate DummyJson-specific DTOs or mappers.
+- [x] Run the test matrix symmetric with Step 4.2, plus test the exhausted decision when
   `next` is null.
 
 ### Step 4.4: DetailRepository Router
 
-- [ ] Route only by `FeedSource` and id to the corresponding source repository.
-- [ ] Use `Flow<DetailLoadEvent>` to represent cached, updated, refresh-failed, and
+- [x] Route only by `FeedSource` and id to the corresponding source repository.
+- [x] Use `Flow<DetailLoadEvent>` to represent cached, updated, refresh-failed, and
   load-failed events.
-- [ ] Test routing for each source, the single emission from fresh cache, two-stage
+- [x] Test routing for each source, the single emission from fresh cache, two-stage
   emissions from stale cache, no-cache offline behavior, and retry.
 
 ### Step 4.5: FavoritesRepository
 
-- [ ] Use `FavoriteStore` to implement `isFavorite`, add, remove, toggle, query, and
+- [x] Use `FavoriteStore` to implement `isFavorite`, add, remove, toggle, query, and
   snapshot update.
-- [ ] Use `TimeProvider` to produce `addedAt` when adding an item.
-- [ ] Toggle is completely independent of API network state.
-- [ ] Support five-item list pages through limit/offset or an equivalent interface.
-- [ ] Test add, remove, duplicate add, sorting, five-item pagination, last page,
+- [x] Use `TimeProvider` to produce `addedAt` when adding an item.
+- [x] Toggle is completely independent of API network state.
+- [x] Support five-item list pages through limit/offset or an equivalent interface.
+- [x] Test add, remove, duplicate add, sorting, five-item pagination, last page,
   snapshot updates preserving `addedAt`, and local operations remaining unaffected
   by every network state.
 
