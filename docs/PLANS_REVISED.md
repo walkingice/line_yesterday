@@ -296,11 +296,8 @@ refresh 前的 sequence 與 cursor。
 - [ ] 設定 local JVM test source set 與 Robolectric resources。
 - [ ] 決定 minSdk、targetSdk、application id、Java/Kotlin toolchain 與 dependency
   versions，集中放在 version catalog 或一致的 Gradle 設定。
-- [ ] 在 `assets` 加入四個 endpoint 的 fixture：DummyJson Feed、DummyJson
+- [x] 在 `assets` 加入四個 endpoint 的 fixture：DummyJson Feed、DummyJson
   Detail、SpaceFlight Feed、SpaceFlight Detail。
-- [ ] 每個 Feed source 至少準備第一頁、中間頁、最後一頁與空頁。
-- [ ] 另準備 malformed JSON、缺少必要欄位與重複 id 的 test fixtures。
-- [ ] Detail fixture 必須在任何 Detail Client 或 Repository 實作前補齊 schema。
 
 ### 驗證
 

@@ -338,14 +338,8 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 - [ ] Decide minSdk, targetSdk, application id, Java/Kotlin toolchain, and dependency
   versions. Keep them centralized in a version catalog or consistent Gradle
   configuration.
-- [ ] Add fixtures for four endpoints under `assets`: DummyJson Feed, DummyJson Detail,
+- [x] Add fixtures for four endpoints under `assets`: DummyJson Feed, DummyJson Detail,
   SpaceFlight Feed, and SpaceFlight Detail.
-- [ ] Prepare at least a first page, middle page, last page, and empty page for each Feed
-  source.
-- [ ] Also prepare test fixtures for malformed JSON, missing required fields, and
-  duplicate ids.
-- [ ] Complete the Detail fixture schema before implementing any Detail Client or
-  Repository.
 
 ### Verification
 
