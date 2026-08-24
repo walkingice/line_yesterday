@@ -406,14 +406,14 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 ### Step 2.3: Mock Clients
 
-- [ ] Create `DummyJsonClient`, `DummyJsonClientMock`, `SpaceFlightClient`, and
+- [x] Create `DummyJsonClient`, `DummyJsonClientMock`, `SpaceFlightClient`, and
   `SpaceFlightClientMock`.
-- [ ] Client selects assets by cursor/id and returns only raw JSON.
-- [ ] Every Client call first runs a controllable delay, then performs the network
+- [x] Client selects assets by cursor/id and returns only raw JSON.
+- [x] Every Client call first runs a controllable delay, then performs the network
   check. When offline, it does not read assets.
-- [ ] Return `Failure` for a missing matching fixture, asset read failure, and other I/O
+- [x] Return `Failure` for a missing matching fixture, asset read failure, and other I/O
   errors.
-- [ ] Test complete raw JSON return values, every cursor/id mapping, offline calls not
+- [x] Test complete raw JSON return values, every cursor/id mapping, offline calls not
   reading assets, controllable delay, and missing assets.
 
 ### Completion Criteria
