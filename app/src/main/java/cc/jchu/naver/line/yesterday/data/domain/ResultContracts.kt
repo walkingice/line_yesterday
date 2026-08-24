@@ -28,3 +28,18 @@ sealed interface DetailLoadEvent {
     data class RefreshFailed(val error: DataError) : DetailLoadEvent
     data class LoadFailed(val error: DataError) : DetailLoadEvent
 }
+
+sealed interface FeedFooterState {
+    data object Ready : FeedFooterState
+    data object Loading : FeedFooterState
+    data object NoMoreItems : FeedFooterState
+    data object Error : FeedFooterState
+    data object Offline : FeedFooterState
+}
+
+data class FeedUiState(
+    val items: List<FeedItem> = emptyList(),
+    val initialLoading: Boolean = false,
+    val refreshing: Boolean = false,
+    val footerState: FeedFooterState = FeedFooterState.Ready,
+)

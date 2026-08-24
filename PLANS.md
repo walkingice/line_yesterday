@@ -555,7 +555,7 @@ Use Robolectric local JVM tests to verify:
 
 ### Implementation
 
-- [ ] Create immutable `FeedUiState` and private mutable state.
+- [x] Create immutable `FeedUiState` and private mutable state.
 - [ ] On initialization, fetch the first page of both sources concurrently.
 - [ ] Keep the complete sequence, cursor, and exhausted state for each source
   separately.
