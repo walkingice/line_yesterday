@@ -609,9 +609,9 @@ Use Robolectric local JVM tests to verify:
 - [x] Collect `DetailLoadEvent` while preserving any stale detail already displayed.
 - [x] When no detail exists, Offline/Error states show a retry action. When stale
   detail exists, a refresh failure does not clear the content.
-- [ ] Query Favorite state at the same time. Toggle writes the current Detail snapshot
+- [x] Query Favorite state at the same time. Toggle writes the current Detail snapshot
   locally.
-- [ ] When a newer Detail is loaded successfully, the ViewModel may update the snapshot
+- [x] When a newer Detail is loaded successfully, the ViewModel may update the snapshot
   if the item is already a Favorite, but it must preserve `addedAt`.
 - [ ] Prevent duplicate load and duplicate toggle operations.
 

@@ -5,6 +5,7 @@ import cc.jchu.naver.line.yesterday.data.domain.DetailLoadEvent
 import cc.jchu.naver.line.yesterday.data.domain.Detail
 import cc.jchu.naver.line.yesterday.data.domain.DataError
 import cc.jchu.naver.line.yesterday.data.repository.DetailReader
+import cc.jchu.naver.line.yesterday.data.repository.FavoriteReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
@@ -139,6 +140,24 @@ class DetailViewModelTest {
         assertEquals(1, reader.requests)
     }
 
+    @Test
+    fun readsAndTogglesFavoriteForLoadedDetail() {
+        val favorites = RecordingFavoriteReader(isFavorite = true)
+        val viewModel = DetailViewModel(
+            DetailArguments(FeedSource.DUMMY_JSON, "47"),
+            EventDetailReader(flowOf(DetailLoadEvent.Updated(detail()))),
+            Dispatchers.Unconfined,
+            favorites,
+        )
+
+        assertTrue(viewModel.uiState.value.isFavorite)
+        assertEquals(1, favorites.snapshotUpdates)
+        viewModel.toggleFavorite()
+
+        assertEquals(1, favorites.toggleCalls)
+        assertTrue(!viewModel.uiState.value.isFavorite)
+    }
+
     private class RecordingDetailReader : DetailReader {
         var requests = 0
         var source: FeedSource? = null
@@ -165,6 +184,25 @@ class DetailViewModelTest {
 
         override fun getDetail(source: FeedSource, id: String): Flow<DetailLoadEvent> {
             return eventFlows[requests++].also { }
+        }
+    }
+
+    private class RecordingFavoriteReader(
+        private var isFavorite: Boolean,
+    ) : FavoriteReader {
+        var toggleCalls = 0
+        var snapshotUpdates = 0
+
+        override suspend fun isFavorite(source: FeedSource, id: String): Boolean = isFavorite
+
+        override suspend fun toggle(detail: Detail): Boolean {
+            toggleCalls++
+            isFavorite = !isFavorite
+            return isFavorite
+        }
+
+        override suspend fun updateSnapshot(detail: Detail) {
+            snapshotUpdates++
         }
     }
 

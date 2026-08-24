@@ -9,11 +9,17 @@ import cc.jchu.naver.line.yesterday.data.favorite.FavoriteEntry
 import cc.jchu.naver.line.yesterday.data.favorite.FavoriteStore
 import cc.jchu.naver.line.yesterday.data.provider.TimeProvider
 
+interface FavoriteReader {
+    suspend fun isFavorite(source: FeedSource, id: String): Boolean
+    suspend fun toggle(detail: Detail): Boolean
+    suspend fun updateSnapshot(detail: Detail)
+}
+
 class FavoritesRepository(
     private val favoriteStore: FavoriteStore,
     private val timeProvider: TimeProvider,
-) {
-    suspend fun isFavorite(source: FeedSource, id: String): Boolean =
+) : FavoriteReader {
+    override suspend fun isFavorite(source: FeedSource, id: String): Boolean =
         favoriteStore.get(source, id) != null
 
     suspend fun add(item: FeedItem) {
@@ -38,6 +44,16 @@ class FavoritesRepository(
         }
     }
 
+    override suspend fun toggle(detail: Detail): Boolean {
+        return if (isFavorite(detail.source, detail.id)) {
+            remove(detail.source, detail.id)
+            false
+        } else {
+            add(detail.toFeedItem())
+            true
+        }
+    }
+
     suspend fun getPage(offset: Int, limit: Int = FAVORITES_PAGE_SIZE): List<FeedItem> {
         require(offset >= 0) { "Offset must not be negative" }
         require(limit > 0) { "Limit must be positive" }
@@ -48,7 +64,7 @@ class FavoritesRepository(
 
     suspend fun count(): Int = favoriteStore.getAll().size
 
-    suspend fun updateSnapshot(detail: Detail) {
+    override suspend fun updateSnapshot(detail: Detail) {
         val current = favoriteStore.get(detail.source, detail.id) ?: return
         favoriteStore.save(
             current.copy(
@@ -58,6 +74,11 @@ class FavoritesRepository(
                 extraInformation = detail.extraInformation,
             ),
         )
+    }
+
+    private fun Detail.toFeedItem(): FeedItem = when (source) {
+        FeedSource.DUMMY_JSON -> DummyJsonItem(id, title, imgUrl, extraInformation)
+        FeedSource.SPACE_FLIGHT -> SpaceFlightItem(id, title, imgUrl, description)
     }
 
     private fun FeedItem.toEntry(addedAt: Long): FavoriteEntry = FavoriteEntry(

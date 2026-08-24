@@ -7,6 +7,7 @@ import cc.jchu.naver.line.yesterday.data.domain.Detail
 import cc.jchu.naver.line.yesterday.data.domain.DetailLoadEvent
 import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.data.repository.DetailReader
+import cc.jchu.naver.line.yesterday.data.repository.FavoriteReader
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +41,7 @@ class DetailViewModel(
     val detailArguments: DetailArguments? = null,
     private val detailReader: DetailReader? = null,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main.immediate,
+    private val favoriteReader: FavoriteReader? = null,
 ) : ViewModel() {
     val screenName = "Detail"
 
@@ -53,6 +55,20 @@ class DetailViewModel(
     val isArgumentsValid: Boolean
         get() = detailArguments != null
 
+    fun toggleFavorite() {
+        val detail = _uiState.value.detail ?: return
+        val favorites = favoriteReader ?: return
+        if (_uiState.value.isTogglingFavorite) return
+        _uiState.value = _uiState.value.copy(isTogglingFavorite = true)
+        viewModelScope.launch(dispatcher) {
+            val isFavorite = favorites.toggle(detail)
+            _uiState.value = _uiState.value.copy(
+                isFavorite = isFavorite,
+                isTogglingFavorite = false,
+            )
+        }
+    }
+
     fun retry() {
         if (!isArgumentsValid || detailReader == null || _uiState.value.isLoading) return
         startLoad()
@@ -62,10 +78,11 @@ class DetailViewModel(
         private val detailArguments: DetailArguments?,
         private val detailReader: DetailReader? = null,
         private val dispatcher: CoroutineDispatcher = Dispatchers.Main.immediate,
+        private val favoriteReader: FavoriteReader? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            DetailViewModel(detailArguments, detailReader, dispatcher) as T
+            DetailViewModel(detailArguments, detailReader, dispatcher, favoriteReader) as T
     }
 
     private fun startInitialLoad() {
@@ -79,6 +96,13 @@ class DetailViewModel(
         viewModelScope.launch(dispatcher) {
             reader.getDetail(arguments.source, arguments.id).collect(::handleEvent)
         }
+        val favorites = favoriteReader ?: return
+        viewModelScope.launch(dispatcher) {
+            val isFavorite = favorites.isFavorite(arguments.source, arguments.id)
+            _uiState.value = _uiState.value.copy(isFavorite = isFavorite)
+            val detail = _uiState.value.detail
+            if (isFavorite && detail != null) favorites.updateSnapshot(detail)
+        }
     }
 
     private fun handleEvent(event: DetailLoadEvent) {
@@ -88,11 +112,21 @@ class DetailViewModel(
                 isLoading = event.isStale,
                 error = null,
             )
-            is DetailLoadEvent.Updated -> _uiState.value.copy(
-                detail = event.detail,
-                isLoading = false,
-                error = null,
-            )
+            is DetailLoadEvent.Updated -> {
+                val state = _uiState.value.copy(
+                    detail = event.detail,
+                    isLoading = false,
+                    error = null,
+                )
+                if (state.isFavorite) {
+                    favoriteReader?.let { favorites ->
+                        viewModelScope.launch(dispatcher) {
+                            favorites.updateSnapshot(event.detail)
+                        }
+                    }
+                }
+                state
+            }
             is DetailLoadEvent.RefreshFailed -> _uiState.value.copy(
                 isLoading = false,
                 error = event.error,
@@ -109,6 +143,8 @@ data class DetailUiState(
     val isLoading: Boolean = false,
     val detail: Detail? = null,
     val error: DataError? = null,
+    val isFavorite: Boolean = false,
+    val isTogglingFavorite: Boolean = false,
 ) {
     val canRetry: Boolean
         get() = detail == null && error != null && !isLoading
