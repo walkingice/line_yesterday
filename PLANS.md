@@ -656,7 +656,7 @@ Use Robolectric local JVM tests to verify:
   Lich component and does not manually instantiate Repository or Database.
 - [x] The lifetimes of database, Store, and Repository must not be shorter than the
   ViewModels that use them.
-- [ ] The mock network state must have a source controllable by the demo app while
+- [x] The mock network state must have a source controllable by the demo app while
   preserving an interface boundary for a future real implementation.
 
 ### Tests and Verification

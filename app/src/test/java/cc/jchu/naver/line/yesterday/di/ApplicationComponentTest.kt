@@ -26,9 +26,10 @@ class ApplicationComponentTest {
         assertSame(first.feedViewModelFactory, second.feedViewModelFactory)
         assertSame(first.favoritesViewModelFactory, second.favoritesViewModelFactory)
         assertTrue(first.timeProvider is cc.jchu.naver.line.yesterday.data.provider.SystemTimeProvider)
-        assertTrue(
-            first.networkStatusProvider is
-                cc.jchu.naver.line.yesterday.data.provider.ConnectivityNetworkStatusProvider,
-        )
+        first.networkStatusProvider.setOnline(false)
+        assertTrue(!first.networkStatusProvider.isOnline())
+        first.networkStatusProvider.setOnline(true)
+        assertTrue(first.networkStatusProvider.isOnline())
+        first.networkStatusProvider.clearOverride()
     }
 }

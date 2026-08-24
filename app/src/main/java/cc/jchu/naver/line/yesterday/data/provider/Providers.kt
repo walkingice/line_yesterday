@@ -11,6 +11,12 @@ interface NetworkStatusProvider {
     fun isOnline(): Boolean
 }
 
+interface NetworkStatusController {
+    fun setOnline(online: Boolean)
+
+    fun clearOverride()
+}
+
 interface TimeProvider {
     fun getCurrentTimeMillis(): Long
 }
@@ -31,6 +37,23 @@ class ConnectivityNetworkStatusProvider(
         val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+    }
+}
+
+class DemoNetworkStatusProvider(
+    private val fallback: NetworkStatusProvider,
+) : NetworkStatusProvider, NetworkStatusController {
+    @Volatile
+    private var override: Boolean? = null
+
+    override fun isOnline(): Boolean = override ?: fallback.isOnline()
+
+    override fun setOnline(online: Boolean) {
+        override = online
+    }
+
+    override fun clearOverride() {
+        override = null
     }
 }
 

@@ -10,6 +10,7 @@ import cc.jchu.naver.line.yesterday.data.client.SpaceFlightClientMock
 import cc.jchu.naver.line.yesterday.data.database.AppDatabase
 import cc.jchu.naver.line.yesterday.data.favorite.RoomFavoriteStore
 import cc.jchu.naver.line.yesterday.data.provider.ConnectivityNetworkStatusProvider
+import cc.jchu.naver.line.yesterday.data.provider.DemoNetworkStatusProvider
 import cc.jchu.naver.line.yesterday.data.provider.NetworkStatusProvider
 import cc.jchu.naver.line.yesterday.data.provider.SystemTimeProvider
 import cc.jchu.naver.line.yesterday.data.provider.TimeProvider
@@ -22,7 +23,7 @@ class ApplicationComponent private constructor(
     val applicationContext: Context,
     val database: AppDatabase,
     val timeProvider: TimeProvider,
-    val networkStatusProvider: NetworkStatusProvider,
+    val networkStatusProvider: DemoNetworkStatusProvider,
     val dummyJsonRepository: DummyJsonRepository,
     val spaceFlightRepository: SpaceFlightRepository,
     val detailRepository: DetailRepository,
@@ -44,7 +45,9 @@ class ApplicationComponent private constructor(
             val jsonCacheStore = RoomJsonCacheStore(database.jsonCacheDao())
             val favoriteStore = RoomFavoriteStore(database.favoriteDao())
             val timeProvider = SystemTimeProvider()
-            val networkStatusProvider = ConnectivityNetworkStatusProvider(applicationContext)
+            val networkStatusProvider = DemoNetworkStatusProvider(
+                ConnectivityNetworkStatusProvider(applicationContext),
+            )
             val dummyJsonRepository = DummyJsonRepository(
                 client = DummyJsonClientMock(applicationContext, networkStatusProvider),
                 cacheStore = jsonCacheStore,
