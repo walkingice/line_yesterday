@@ -686,7 +686,7 @@ Use Robolectric local JVM tests to verify:
 - [x] Use stable `(source, id)` identity and DiffUtil.
 - [x] Collect `FeedUiState` in a lifecycle-aware manner. Rendering must not modify
   ViewModel state directly.
-- [ ] Pull-to-refresh calls `refresh()`. Depending on state, the footer button calls
+- [x] Pull-to-refresh calls `refresh()`. Depending on state, the footer button calls
   load more or retry.
 - [ ] `Ready`, `Loading`, `NoMoreItems`, `Error`, and `Offline` each have clear text and
   enabled state.

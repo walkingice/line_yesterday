@@ -35,9 +35,16 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = FeedAdapter({}, {})
+        val adapter = FeedAdapter(
+            onItemClick = {},
+            onFooterClick = {
+                val state = viewModel.uiState.value.footerState
+                handleFooterAction(state, viewModel::loadMoreItems, viewModel::loadMoreItems)
+            },
+        )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
+        binding.swipeRefresh.setOnRefreshListener { viewModel.refresh() }
         binding.screenName.apply {
             text = viewModel.screenName
             setOnClickListener { openFixedDetail() }
@@ -55,6 +62,18 @@ class FeedFragment : Fragment() {
         startActivity(
             DetailActivity.createIntent(requireContext(), DetailActivity.SOURCE_DUMMY_JSON, "1"),
         )
+    }
+}
+
+internal fun handleFooterAction(
+    state: FeedFooterState,
+    loadMore: () -> Unit,
+    retry: () -> Unit,
+) {
+    when (state) {
+        FeedFooterState.Ready -> loadMore()
+        FeedFooterState.Error, FeedFooterState.Offline -> retry()
+        FeedFooterState.Loading, FeedFooterState.NoMoreItems -> Unit
     }
 }
 
