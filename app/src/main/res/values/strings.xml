@@ -6,4 +6,6 @@
     <string name="feed_empty_content">No content available</string>
     <string name="feed_error_content">Unable to load content</string>
     <string name="feed_item_image">Feed item image</string>
+    <string name="detail_image">Detail image</string>
+    <string name="detail_error_content">Unable to load detail</string>
 </resources>

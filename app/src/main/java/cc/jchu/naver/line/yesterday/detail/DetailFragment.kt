@@ -5,10 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.ViewModelProvider
+import coil3.load
 import cc.jchu.naver.line.yesterday.databinding.FragmentDetailBinding
 import cc.jchu.naver.line.yesterday.di.applicationComponent
 import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class DetailFragment : Fragment() {
     private val viewModel by lazy {
@@ -27,6 +33,17 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.screenName.text = screenLabel()
+        if (!viewModel.isArgumentsValid) {
+            binding.detailError.visibility = View.VISIBLE
+            return
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collectLatest { state ->
+                    renderDetailState(binding, state)
+                }
+            }
+        }
     }
 
     private fun screenLabel(): String =
@@ -49,4 +66,21 @@ class DetailFragment : Fragment() {
                 }
             }
     }
+}
+
+internal fun renderDetailState(binding: FragmentDetailBinding, state: DetailUiState) {
+    val detail = state.detail
+    binding.detailLoading.visibility = if (state.isLoading && detail == null) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
+    binding.detailContent.visibility = if (detail == null) View.GONE else View.VISIBLE
+    binding.detailError.visibility = if (state.error == null) View.GONE else View.VISIBLE
+    if (detail == null) return
+
+    binding.detailImage.load(detail.imgUrl)
+    binding.detailTitle.text = detail.title
+    binding.detailDescription.text = detail.description
+    binding.detailExtraInformation.text = detail.extraInformation
 }
