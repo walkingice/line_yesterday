@@ -1,17 +1,18 @@
 package cc.jchu.naver.line.yesterday
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 
-import org.junit.Assert.*
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
+@RunWith(RobolectricTestRunner::class)
+class RobolectricResourceTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun applicationResourcesAreAvailable() {
+        val appName = RuntimeEnvironment.getApplication()
+            .getString(R.string.app_name)
+
+        assertEquals("LINE Yesterday", appName)
     }
 }
