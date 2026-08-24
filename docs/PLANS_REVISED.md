@@ -350,22 +350,22 @@ refresh 前的 sequence 與 cursor。
 
 ### Step 2.2：DTO、parser 與 mapper
 
-- [ ] 依四種 fixture 建立 API DTO。
-- [ ] 建立 Gson parser 與 DTO-to-domain mapper；不要把 Gson annotation 放進
+- [x] 依四種 fixture 建立 API DTO。
+- [x] 建立 Gson parser 與 DTO-to-domain mapper；不要把 Gson annotation 放進
   domain model。
-- [ ] Feed parser 同時產生 items 與下一個 cursor／exhausted 資訊。
-- [ ] 測試正常 JSON、空頁、最後一頁、malformed JSON、缺少必要欄位、不同
+- [x] Feed parser 同時產生 items 與下一個 cursor／exhausted 資訊。
+- [x] 測試正常 JSON、空頁、最後一頁、malformed JSON、缺少必要欄位、不同
   source 相同 id，以及重複 id。
 
 ### Step 2.3：Mock Clients
 
-- [ ] 建立 `DummyJsonClient`、`DummyJsonClientMock`、`SpaceFlightClient` 與
+- [x] 建立 `DummyJsonClient`、`DummyJsonClientMock`、`SpaceFlightClient` 與
   `SpaceFlightClientMock`。
-- [ ] Client 依 cursor/id 選擇 asset，並只回傳 raw JSON。
-- [ ] 每個 Client call 先執行可控制的 delay，再執行 network check；offline 時不讀
+- [x] Client 依 cursor/id 選擇 asset，並只回傳 raw JSON。
+- [x] 每個 Client call 先執行可控制的 delay，再執行 network check；offline 時不讀
   asset。
-- [ ] 無對應 fixture、asset read failure 與其他 I/O error 回傳 `Failure`。
-- [ ] 測試 raw JSON 完整回傳、所有 cursor/id mapping、offline 不讀 asset、
+- [x] 無對應 fixture、asset read failure 與其他 I/O error 回傳 `Failure`。
+- [x] 測試 raw JSON 完整回傳、所有 cursor/id mapping、offline 不讀 asset、
   controllable delay 與 missing asset。
 
 ### 完成條件
