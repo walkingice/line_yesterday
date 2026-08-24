@@ -289,7 +289,7 @@ refresh 前的 sequence 與 cursor。
 ### 實作
 
 - [x] 建立單一 Android application module 與最小 Hello World app。
-- [ ] 設定 Kotlin、Android Jetpack、coroutines、Flow、Room、RecyclerView、
+- [x] 設定 Kotlin、Android Jetpack、coroutines、Flow、Room、RecyclerView、
   SwipeRefreshLayout、Gson、Coil、Lich Component、Mockito、kotlin-test 與
   Robolectric。若 Robolectric test 需要替換 Lich component，再加入對應的
   Lich component test helper，不加入其他未使用的 Lich modules。
