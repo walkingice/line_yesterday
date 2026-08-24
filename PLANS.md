@@ -556,14 +556,14 @@ Use Robolectric local JVM tests to verify:
 ### Implementation
 
 - [x] Create immutable `FeedUiState` and private mutable state.
-- [ ] On initialization, fetch the first page of both sources concurrently.
-- [ ] Keep the complete sequence, cursor, and exhausted state for each source
+- [x] On initialization, fetch the first page of both sources concurrently.
+- [x] Keep the complete sequence, cursor, and exhausted state for each source
   separately.
-- [ ] Use two child coroutines to read non-exhausted sources concurrently, then
+- [x] Use two child coroutines to read non-exhausted sources concurrently, then
   evaluate the results together.
-- [ ] A successful source can update and advance independently. A failed source keeps
+- [x] A successful source can update and advance independently. A failed source keeps
   its cursor and retries the same page next time.
-- [ ] Do not create requests for an exhausted source.
+- [x] Do not create requests for an exhausted source.
 - [x] Implement deduplication and deterministic alternating merge with pure functions.
 - [ ] `loadMoreItems()` returns immediately while Loading, refreshing, or
   NoMoreItems.
