@@ -680,7 +680,7 @@ Use Robolectric local JVM tests to verify:
 
 - [x] Create SwipeRefreshLayout, RecyclerView, empty-content/initial-loading, and error
   views.
-- [ ] Use one adapter supporting three view types: DummyJson item, SpaceFlight item,
+- [x] Use one adapter supporting three view types: DummyJson item, SpaceFlight item,
   and footer state button.
 - [ ] Item layouts show title, source-specific information, and a Coil image.
 - [ ] Use stable `(source, id)` identity and DiffUtil.
