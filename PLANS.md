@@ -618,7 +618,7 @@ Use Robolectric local JVM tests to verify:
 ### Step 6.2: FavoritesViewModel
 
 - [x] Initially show five items. Every `loadMoreItems()` reveals five more.
-- [ ] Enter NoMoreItems after every item is visible. An empty list also has no more
+- [x] Enter NoMoreItems after every item is visible. An empty list also has no more
   items.
 - [ ] Every time the Fragment returns to resumed state, call refresh and reread data
   through FavoritesRepository so toggles on the Detail screen are reflected.
