@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.material)
 
     ksp(libs.androidx.room.compiler)
+    kspTest(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     testImplementation(kotlin("test"))

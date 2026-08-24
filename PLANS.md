@@ -426,20 +426,20 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 ### Step 3.1: JSON Cache Persistence
 
-- [ ] Create `JsonCacheEntity` with an auto-generated `_id`, timestamp, type, key, and
+- [x] Create `JsonCacheEntity` with an auto-generated `_id`, timestamp, type, key, and
   `jsonString`. The Store interface exposes `jsonString` using the clearer semantic
   name `rawJson`.
-- [ ] Always use the following `CacheType` mapping. Do not derive database values
+- [x] Always use the following `CacheType` mapping. Do not derive database values
   automatically from enum ordinal: `1 = DummyJsonFeed`,
   `2 = SpaceFlightFeed`, `3 = DummyJsonDetail`, and
   `4 = SpaceFlightDetail`.
-- [ ] Create a unique index on `(type, key)`.
-- [ ] Create `JsonCacheDao` with query, atomic upsert, targeted deletion, and clear-all
+- [x] Create a unique index on `(type, key)`.
+- [x] Create `JsonCacheDao` with query, atomic upsert, targeted deletion, and clear-all
   API cache operations.
-- [ ] Create the `JsonCacheStore` interface and Room-backed implementation.
-- [ ] `replaceFeedPages` uses a Room transaction to upsert the new first page, then
+- [x] Create the `JsonCacheStore` interface and Room-backed implementation.
+- [x] `replaceFeedPages` uses a Room transaction to upsert the new first page, then
   delete other keys for the same Feed type. Roll back if any step fails.
-- [ ] Store does not import Gson DTOs or domain models.
+- [x] Store does not import Gson DTOs or domain models.
 
 ### Step 3.2: Favorite Persistence
 
