@@ -110,9 +110,10 @@ internal fun renderFeedState(
 ) {
     val shouldResetListPosition = adapter.currentList.none { it is FeedAdapter.Row.Item } &&
         state.items.isNotEmpty()
-    adapter.submitFeed(state.items, state.footerState)
-    if (shouldResetListPosition) {
-        binding.recyclerView.scrollToPosition(0)
+    adapter.submitFeed(state.items, state.footerState) {
+        if (shouldResetListPosition) {
+            binding.recyclerView.scrollToPosition(0)
+        }
     }
     binding.swipeRefresh.isRefreshing = state.refreshing
 

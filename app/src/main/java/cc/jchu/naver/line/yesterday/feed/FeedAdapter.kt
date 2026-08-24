@@ -3,6 +3,7 @@ package cc.jchu.naver.line.yesterday.feed
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil3.asImage
@@ -15,18 +16,28 @@ import cc.jchu.naver.line.yesterday.data.domain.SpaceFlightItem
 import cc.jchu.naver.line.yesterday.databinding.ItemDummyJsonBinding
 import cc.jchu.naver.line.yesterday.databinding.ItemFeedFooterBinding
 import cc.jchu.naver.line.yesterday.databinding.ItemSpaceFlightBinding
+import java.util.concurrent.Executor
 
 class FeedAdapter(
     private val onItemClick: (FeedItem) -> Unit,
     private val onFooterClick: () -> Unit,
-) : ListAdapter<FeedAdapter.Row, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+    backgroundExecutor: Executor? = null,
+) : ListAdapter<FeedAdapter.Row, RecyclerView.ViewHolder>(
+    AsyncDifferConfig.Builder(DIFF_CALLBACK).apply {
+        backgroundExecutor?.let(::setBackgroundThreadExecutor)
+    }.build(),
+) {
 
     init {
         setHasStableIds(true)
     }
 
-    fun submitFeed(items: List<FeedItem>, footerState: FeedFooterState) {
-        submitList(items.map(Row::Item) + Row.Footer(footerState))
+    fun submitFeed(
+        items: List<FeedItem>,
+        footerState: FeedFooterState,
+        onCommitted: () -> Unit = {},
+    ) {
+        submitList(items.map(Row::Item) + Row.Footer(footerState), onCommitted)
     }
 
     override fun getItemViewType(position: Int): Int = when (val row = getItem(position)) {
