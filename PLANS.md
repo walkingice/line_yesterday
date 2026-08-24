@@ -605,7 +605,7 @@ Use Robolectric local JVM tests to verify:
 
 - [x] Obtain `FeedSource` and id from saved state/creation arguments and validate the
   input.
-- [ ] Start Detail loading only when the screen opens for the first time.
+- [x] Start Detail loading only when the screen opens for the first time.
 - [ ] Collect `DetailLoadEvent` while preserving any stale detail already displayed.
 - [ ] When no detail exists, Offline/Error states show a retry action. When stale
   detail exists, a refresh failure does not clear the content.
