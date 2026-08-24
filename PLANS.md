@@ -166,7 +166,7 @@ JsonCacheStore ─────┘
   DTOs or domain models.
 - Client encapsulates endpoint/asset selection, network state checks, and simulated
   latency.
-- Every call first uses an injectable `DelayProvider`, then checks
+- Every call in mock client first uses coroutine `delay(1000)` to simulate latency, then checks
   `NetworkStatusProvider`. Therefore, offline calls also have simulated latency but
   do not read assets. Production uses coroutine delay; unit tests use an
   immediately completing or controllable fake.
@@ -389,7 +389,7 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 - [x] Create `FeedSource`, `FeedItem`, `DummyJsonItem`, `SpaceFlightItem`, `Detail`,
   `PageCursor`, `DataError`, and shared result types.
-- [x] Create `NetworkStatusProvider`, `DelayProvider`, `TimeProvider`, and production/fake
+- [x] Create `NetworkStatusProvider`, `TimeProvider`, and production/fake
   implementations.
 - [x] Create an injectable coroutine dispatcher provider.
 - [x] Add unit tests for identity, cursor, and fake providers.
@@ -650,7 +650,7 @@ Use Robolectric local JVM tests to verify:
   only for retrieving the component; objects inside it still use constructor
   injection.
 - [ ] Create and retain a single AppDatabase through that component.
-- [ ] Create production TimeProvider, NetworkStatusProvider, DelayProvider, Clients,
+- [ ] Create production TimeProvider, NetworkStatusProvider, Clients,
   Stores, and Repositories.
 - [ ] Create three ViewModel factories. Fragment retrieves a factory only through the
   Lich component and does not manually instantiate Repository or Database.

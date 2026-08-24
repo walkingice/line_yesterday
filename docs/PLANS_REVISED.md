@@ -144,7 +144,7 @@ JsonCacheStore ─────┘
 - Client interface 與 mock implementation 都只回傳 raw JSON，不回傳 API DTO
   或 domain model。
 - Client 封裝 endpoint／asset 選擇、network 狀態檢查與模擬 latency。
-- 每次呼叫先經過可注入的 `DelayProvider`，再檢查
+- 每次呼叫 mock client 先經過 coroutine 的 `delay(10000)` 來模擬 latency，再檢查
   `NetworkStatusProvider`。因此 offline call 也有模擬 latency，但不會讀 asset。
   production 使用 coroutine delay，unit test 使用立即完成或可控制的 fake。
 - Client 不使用 Room、不讀 cache、不執行 Gson parsing，也不決定 freshness。
@@ -343,7 +343,7 @@ refresh 前的 sequence 與 cursor。
 
 - [ ] 建立 `FeedSource`、`FeedItem`、`DummyJsonItem`、`SpaceFlightItem`、
   `Detail`、`PageCursor`、`DataError` 與共用 result type。
-- [ ] 建立 `NetworkStatusProvider`、`DelayProvider`、`TimeProvider` 與 production／
+- [ ] 建立 `NetworkStatusProvider`、`TimeProvider` 與 production／
   fake implementations。
 - [ ] 建立 injectable coroutine dispatcher provider。
 - [ ] 為 identity、cursor 與 fake provider 加入 unit tests。
@@ -571,7 +571,7 @@ refresh 前的 sequence 與 cursor。
   管理 singleton dependency graph；Lich 只負責取得 component，內部物件仍使用
   constructor injection。
 - [ ] 由該 component 建立並持有單一 AppDatabase。
-- [ ] 建立 production TimeProvider、NetworkStatusProvider、DelayProvider、Clients、
+- [ ] 建立 production TimeProvider、NetworkStatusProvider、Clients、
   Stores 與 Repositories。
 - [ ] 建立三個 ViewModel factories；Fragment 只透過 Lich component 取得 factory，
   不手動 new Repository 或 Database。

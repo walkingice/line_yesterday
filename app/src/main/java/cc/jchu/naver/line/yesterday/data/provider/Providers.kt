@@ -11,10 +11,6 @@ interface NetworkStatusProvider {
     fun isOnline(): Boolean
 }
 
-interface DelayProvider {
-    suspend fun delayMillis(milliseconds: Long)
-}
-
 interface TimeProvider {
     fun getCurrentTimeMillis(): Long
 }
@@ -38,12 +34,6 @@ class ConnectivityNetworkStatusProvider(
     }
 }
 
-class CoroutineDelayProvider : DelayProvider {
-    override suspend fun delayMillis(milliseconds: Long) {
-        delay(milliseconds)
-    }
-}
-
 class SystemTimeProvider : TimeProvider {
     override fun getCurrentTimeMillis(): Long = System.currentTimeMillis()
 }
@@ -58,14 +48,6 @@ class FakeNetworkStatusProvider(
     var online: Boolean = true,
 ) : NetworkStatusProvider {
     override fun isOnline(): Boolean = online
-}
-
-class FakeDelayProvider : DelayProvider {
-    val requestedDelays = mutableListOf<Long>()
-
-    override suspend fun delayMillis(milliseconds: Long) {
-        requestedDelays += milliseconds
-    }
 }
 
 class FakeTimeProvider(
