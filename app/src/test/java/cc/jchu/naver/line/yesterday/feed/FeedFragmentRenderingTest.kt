@@ -1,9 +1,12 @@
 package cc.jchu.naver.line.yesterday.feed
 
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.data.domain.DummyJsonItem
 import cc.jchu.naver.line.yesterday.data.domain.FeedFooterState
 import cc.jchu.naver.line.yesterday.data.domain.FeedUiState
@@ -13,6 +16,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
+import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
 class FeedFragmentRenderingTest {
@@ -49,9 +54,20 @@ class FeedFragmentRenderingTest {
     @Test
     fun firstItemsAreShownFromTheTop() {
         val binding = createBinding()
-        binding.recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-        val adapter = FeedAdapter({}, {})
+        val layoutManager = RecordingLayoutManager(binding.root.context, binding.recyclerView)
+        binding.recyclerView.layoutManager = layoutManager
+        val executor = QueuedExecutor()
+        val adapter = FeedAdapter({}, {}, executor)
         binding.recyclerView.adapter = adapter
+
+        renderFeedState(
+            binding,
+            adapter,
+            FeedUiState(footerState = FeedFooterState.Ready),
+        )
+        shadowOf(Looper.getMainLooper()).idle()
+        measureAndLayout(binding.recyclerView)
+        binding.recyclerView.findViewById<Button>(R.id.footer_button).requestFocus()
 
         renderFeedState(
             binding,
@@ -62,18 +78,51 @@ class FeedFragmentRenderingTest {
                 },
             ),
         )
+        executor.runNext()
+        shadowOf(Looper.getMainLooper()).idle()
 
-        binding.recyclerView.measure(
-            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY),
-        )
-        binding.recyclerView.layout(0, 0, 1080, 1920)
+        assertEquals(21, adapter.itemCount)
+        measureAndLayout(binding.recyclerView)
 
         assertEquals(
             0,
-            (binding.recyclerView.layoutManager as LinearLayoutManager)
-                .findFirstVisibleItemPosition(),
+            layoutManager.findFirstVisibleItemPosition(),
         )
+        assertEquals(21, layoutManager.itemCountWhenScrolledToTop)
+    }
+
+    private fun measureAndLayout(recyclerView: androidx.recyclerview.widget.RecyclerView) {
+        recyclerView.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY),
+        )
+        recyclerView.layout(0, 0, 1080, 1920)
+    }
+
+    private class RecordingLayoutManager(
+        context: android.content.Context,
+        private val recyclerView: androidx.recyclerview.widget.RecyclerView,
+    ) : LinearLayoutManager(context) {
+        var itemCountWhenScrolledToTop = 0
+
+        override fun scrollToPosition(position: Int) {
+            super.scrollToPosition(position)
+            if (position == 0) {
+                itemCountWhenScrolledToTop = recyclerView.adapter?.itemCount ?: 0
+            }
+        }
+    }
+
+    private class QueuedExecutor : Executor {
+        private val tasks = mutableListOf<Runnable>()
+
+        override fun execute(command: Runnable) {
+            tasks += command
+        }
+
+        fun runNext() {
+            tasks.removeFirst().run()
+        }
     }
 
     private fun createBinding(): FragmentFeedBinding = FragmentFeedBinding.inflate(
