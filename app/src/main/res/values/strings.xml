@@ -3,6 +3,7 @@
     <string name="feed_screen_name">Feed</string>
     <string name="detail_screen_name">Detail</string>
     <string name="favorites_screen_name">Favorites</string>
+    <string name="favorites_empty_content">No favorites yet</string>
     <string name="feed_empty_content">No content available</string>
     <string name="feed_error_content">Unable to load content</string>
     <string name="feed_item_image">Feed item image</string>

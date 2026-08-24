@@ -738,18 +738,18 @@ Use Robolectric local JVM tests to verify:
 
 ### Implementation
 
-- [ ] Reuse Feed item adapter/model capabilities. If necessary, add only
+- [x] Reuse Feed item adapter/model capabilities. If necessary, add only
   Favorite-specific binding; do not create a duplicate Favorites domain model.
-- [ ] Initially show five items. Each footer button action reveals the next five, and
+- [x] Initially show five items. Each footer button action reveals the next five, and
   the footer becomes NoMoreItems after all items are visible.
-- [ ] Pull-to-refresh rereads only local Favorites and does not clear data.
-- [ ] `onResume` tells ViewModel to refresh so changes made in Detail are reflected.
-- [ ] Render in newest-first order. Clicking an item passes only source/id to Detail.
-- [ ] Do not provide an option menu. System Back returns to Feed.
+- [x] Pull-to-refresh rereads only local Favorites and does not clear data.
+- [x] `onResume` tells ViewModel to refresh so changes made in Detail are reflected.
+- [x] Render in newest-first order. Clicking an item passes only source/id to Detail.
+- [x] Do not provide an option menu. System Back returns to Feed.
 
 ### Verification
 
-- Use Robolectric local JVM tests to verify the empty list, content, footer states,
+- [x] Use Robolectric local JVM tests to verify the empty list, content, footer states,
   refresh, item click extras, absence of an option menu, and resumed-refresh
   forwarding.
 - Run all local tests, lint, and debug assemble.
