@@ -688,7 +688,7 @@ Use Robolectric local JVM tests to verify:
   ViewModel state directly.
 - [x] Pull-to-refresh calls `refresh()`. Depending on state, the footer button calls
   load more or retry.
-- [ ] `Ready`, `Loading`, `NoMoreItems`, `Error`, and `Offline` each have clear text and
+- [x] `Ready`, `Loading`, `NoMoreItems`, `Error`, and `Offline` each have clear text and
   enabled state.
 - [ ] Clicking an item passes only source and id to DetailActivity.
 - [ ] The option menu opens FavoritesActivity.

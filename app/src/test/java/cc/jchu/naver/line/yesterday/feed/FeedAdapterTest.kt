@@ -3,6 +3,7 @@ package cc.jchu.naver.line.yesterday.feed
 import android.view.View
 import android.os.Looper
 import android.widget.ImageView
+import android.widget.Button
 import android.widget.FrameLayout
 import cc.jchu.naver.line.yesterday.data.domain.DummyJsonItem
 import cc.jchu.naver.line.yesterday.data.domain.FeedFooterState
@@ -81,5 +82,31 @@ class FeedAdapterTest {
         assertTrue(spaceHolder.itemView.findViewById<ImageView>(
             cc.jchu.naver.line.yesterday.R.id.image,
         ) != null)
+    }
+
+    @Test
+    fun footerStatesHaveClearTextAndEnabledBehavior() {
+        val expected = mapOf(
+            FeedFooterState.Ready to ("Load more" to true),
+            FeedFooterState.Loading to ("Loading..." to false),
+            FeedFooterState.NoMoreItems to ("No more items" to false),
+            FeedFooterState.Error to ("Retry" to true),
+            FeedFooterState.Offline to ("Retry while online" to true),
+        )
+        val parent = FrameLayout(RuntimeEnvironment.getApplication())
+
+        expected.forEach { (state, expectedValues) ->
+            val adapter = FeedAdapter({}, {})
+            adapter.submitFeed(emptyList(), state)
+            shadowOf(Looper.getMainLooper()).idle()
+            val holder = adapter.onCreateViewHolder(parent, adapter.getItemViewType(0))
+            adapter.onBindViewHolder(holder, 0)
+            val button = holder.itemView.findViewById<Button>(
+                cc.jchu.naver.line.yesterday.R.id.footer_button,
+            )
+
+            assertEquals(expectedValues.first, button.text)
+            assertEquals(expectedValues.second, button.isEnabled)
+        }
     }
 }
