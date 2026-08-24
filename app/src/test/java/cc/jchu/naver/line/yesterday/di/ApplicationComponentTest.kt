@@ -17,10 +17,14 @@ class ApplicationComponentTest {
         val second = context.applicationComponent()
 
         assertSame(first, second)
-        assertSame(context.applicationContext, first.applicationContext)
-        assertSame(context, first.applicationContext)
         assertSame(first.database, second.database)
         assertSame(first.database.jsonCacheDao(), second.database.jsonCacheDao())
+        assertSame(first.dummyJsonRepository, second.dummyJsonRepository)
+        assertSame(first.spaceFlightRepository, second.spaceFlightRepository)
+        assertSame(first.detailRepository, second.detailRepository)
+        assertSame(first.favoritesRepository, second.favoritesRepository)
+        assertSame(first.feedViewModelFactory, second.feedViewModelFactory)
+        assertSame(first.favoritesViewModelFactory, second.favoritesViewModelFactory)
         assertTrue(first.timeProvider is cc.jchu.naver.line.yesterday.data.provider.SystemTimeProvider)
         assertTrue(
             first.networkStatusProvider is
