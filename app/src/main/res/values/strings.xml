@@ -2,4 +2,5 @@
     <string name="app_name">LINE Yesterday</string>
     <string name="feed_screen_name">Feed</string>
     <string name="detail_screen_name">Detail</string>
+    <string name="favorites_screen_name">Favorites</string>
 </resources>
