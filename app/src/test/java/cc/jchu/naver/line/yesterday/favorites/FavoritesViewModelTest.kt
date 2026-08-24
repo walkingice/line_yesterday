@@ -72,6 +72,29 @@ class FavoritesViewModelTest {
         assertEquals("6", viewModel.uiState.value.items.first().id)
     }
 
+    @Test
+    fun refreshDoesNotExposeMoreItemsThanTheNewTotal() = runBlocking {
+        val store = FakeStore()
+        repeat(10) { index -> store.save(entry(index)) }
+        val viewModel = FavoritesViewModel(
+            FavoritesRepository(store, FakeTimeProvider()),
+            FakeDispatcherProvider(),
+        )
+        viewModel.loadMoreItems()
+        store.delete(FeedSource.DUMMY_JSON, "0")
+        store.delete(FeedSource.DUMMY_JSON, "1")
+        store.delete(FeedSource.DUMMY_JSON, "2")
+        store.delete(FeedSource.DUMMY_JSON, "3")
+        store.delete(FeedSource.DUMMY_JSON, "4")
+        store.delete(FeedSource.DUMMY_JSON, "5")
+        store.delete(FeedSource.DUMMY_JSON, "6")
+
+        viewModel.refresh()
+
+        assertEquals(3, viewModel.uiState.value.items.size)
+        assertEquals(3, viewModel.uiState.value.totalCount)
+    }
+
     private fun entry(index: Int) = FavoriteEntry(
         source = FeedSource.DUMMY_JSON,
         itemId = index.toString(),

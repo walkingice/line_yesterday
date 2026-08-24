@@ -622,7 +622,7 @@ Use Robolectric local JVM tests to verify:
   items.
 - [x] Every time the Fragment returns to resumed state, call refresh and reread data
   through FavoritesRepository so toggles on the Detail screen are reflected.
-- [ ] Preserve a reasonable visible limit after refresh, but do not exceed the current
+- [x] Preserve a reasonable visible limit after refresh, but do not exceed the current
   total count.
 - [ ] Favorite is a local operation and does not show Offline due to network state.
 
