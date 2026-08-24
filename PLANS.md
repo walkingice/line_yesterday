@@ -565,7 +565,7 @@ Use Robolectric local JVM tests to verify:
   its cursor and retries the same page next time.
 - [x] Do not create requests for an exhausted source.
 - [x] Implement deduplication and deterministic alternating merge with pure functions.
-- [ ] `loadMoreItems()` returns immediately while Loading, refreshing, or
+- [x] `loadMoreItems()` returns immediately while Loading, refreshing, or
   NoMoreItems.
 - [x] `refresh()` returns immediately while load more or refresh is running.
 - [x] Refresh forces both sources to read their first page. A successful source
