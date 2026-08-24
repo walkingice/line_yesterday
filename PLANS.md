@@ -567,11 +567,11 @@ Use Robolectric local JVM tests to verify:
 - [x] Implement deduplication and deterministic alternating merge with pure functions.
 - [ ] `loadMoreItems()` returns immediately while Loading, refreshing, or
   NoMoreItems.
-- [ ] `refresh()` returns immediately while load more or refresh is running.
-- [ ] Refresh forces both sources to read their first page. A successful source
+- [x] `refresh()` returns immediately while load more or refresh is running.
+- [x] Refresh forces both sources to read their first page. A successful source
   replaces its entire sequence and cursor; a failed source preserves its original
   sequence, cursor, and exhausted state.
-- [ ] Calculate footer state with the separate load-more and refresh failure matrices.
+- [x] Calculate footer state with the separate load-more and refresh failure matrices.
 
 ### Tests
 

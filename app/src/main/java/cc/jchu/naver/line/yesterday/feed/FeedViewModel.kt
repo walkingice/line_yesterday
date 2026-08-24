@@ -55,11 +55,30 @@ class FeedViewModel(
         startLoadMore()
     }
 
+    fun refresh() {
+        if (!claimRefresh()) return
+        viewModelScope.launch(dispatcherProvider.io) {
+            try {
+                val outcomes = loadSources(forceRefresh = true)
+                applyRefreshResults(outcomes)
+                mutableUiState.value = mutableUiState.value.copy(
+                    refreshing = false,
+                    footerState = evaluateRefreshFooter(
+                        outcomes.map { it.result },
+                        dummyState.exhausted && spaceState.exhausted,
+                    ),
+                )
+            } finally {
+                releaseOperation()
+            }
+        }
+    }
+
     private fun startLoadMore() {
         if (!claimOperation()) return
         viewModelScope.launch(dispatcherProvider.io) {
             try {
-                val outcomes = loadSources()
+                val outcomes = loadSources(forceRefresh = false)
                 applyLoadResults(outcomes)
                 mutableUiState.value = mutableUiState.value.copy(
                     initialLoading = false,
@@ -81,12 +100,18 @@ class FeedViewModel(
         var added: Boolean = false,
     )
 
-    private suspend fun loadSources(): List<SourceOutcome> = coroutineScope {
-        val dummy = if (!dummyState.exhausted) async {
-            SourceOutcome(FeedSource.DUMMY_JSON, dummyJsonRepository!!.getFeedPage(dummyState.cursor))
+    private suspend fun loadSources(forceRefresh: Boolean): List<SourceOutcome> = coroutineScope {
+        val dummy = if (forceRefresh || !dummyState.exhausted) async {
+            SourceOutcome(
+                FeedSource.DUMMY_JSON,
+                dummyJsonRepository!!.getFeedPage(PageCursor("0"), forceRefresh),
+            )
         } else null
-        val space = if (!spaceState.exhausted) async {
-            SourceOutcome(FeedSource.SPACE_FLIGHT, spaceFlightRepository!!.getFeedPage(spaceState.cursor))
+        val space = if (forceRefresh || !spaceState.exhausted) async {
+            SourceOutcome(
+                FeedSource.SPACE_FLIGHT,
+                spaceFlightRepository!!.getFeedPage(PageCursor("0"), forceRefresh),
+            )
         } else null
         listOfNotNull(dummy?.await(), space?.await())
     }
@@ -104,6 +129,21 @@ class FeedViewModel(
                 ))
             } else if (outcome.added) {
                 setState(outcome.source, current.copy(items = newItems))
+            }
+        }
+        publishItems()
+    }
+
+    private fun applyRefreshResults(outcomes: List<SourceOutcome>) {
+        outcomes.forEach { outcome ->
+            if (outcome.result.loadFailure == null) {
+                val items = deduplicateFeedItems(outcome.result.items)
+                val current = stateFor(outcome.source)
+                setState(outcome.source, SourceState(
+                    items = items,
+                    cursor = outcome.result.nextCursor ?: current.cursor,
+                    exhausted = outcome.result.isExhausted,
+                ))
             }
         }
         publishItems()
@@ -139,6 +179,16 @@ class FeedViewModel(
         true
     }
 
+    private fun claimRefresh(): Boolean = synchronized(operationLock) {
+        if (!hasRepositories() || operationRunning) return false
+        operationRunning = true
+        mutableUiState.value = mutableUiState.value.copy(
+            refreshing = true,
+            footerState = FeedFooterState.Loading,
+        )
+        true
+    }
+
     private fun releaseOperation() = synchronized(operationLock) {
         operationRunning = false
     }
@@ -154,6 +204,25 @@ internal fun evaluateLoadFooter(
     if (allSourcesExhausted) {
         return FeedFooterState.NoMoreItems
     }
+    val failures = results.mapNotNull(FeedPageResult::loadFailure)
+    if (failures.isNotEmpty()) {
+        return if (failures.all { it is DataError.Offline }) {
+            FeedFooterState.Offline
+        } else {
+            FeedFooterState.Error
+        }
+    }
+    return FeedFooterState.Ready
+}
+
+internal fun evaluateRefreshFooter(
+    results: List<FeedPageResult>,
+    allSourcesExhausted: Boolean,
+): FeedFooterState {
+    if (results.any { it.loadFailure == null && it.items.isNotEmpty() }) {
+        return FeedFooterState.Ready
+    }
+    if (allSourcesExhausted) return FeedFooterState.NoMoreItems
     val failures = results.mapNotNull(FeedPageResult::loadFailure)
     if (failures.isNotEmpty()) {
         return if (failures.all { it is DataError.Offline }) {
