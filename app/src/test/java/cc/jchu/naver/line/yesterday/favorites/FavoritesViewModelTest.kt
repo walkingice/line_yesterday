@@ -55,6 +55,23 @@ class FavoritesViewModelTest {
         }
     }
 
+    @Test
+    fun refreshRereadsFavoritesAndPreservesVisibleLimit() = runBlocking {
+        val store = FakeStore()
+        repeat(6) { index -> store.save(entry(index)) }
+        val viewModel = FavoritesViewModel(
+            FavoritesRepository(store, FakeTimeProvider()),
+            FakeDispatcherProvider(),
+        )
+        viewModel.loadMoreItems()
+        store.save(entry(6))
+
+        viewModel.refresh()
+
+        assertEquals(6, viewModel.uiState.value.items.size)
+        assertEquals("6", viewModel.uiState.value.items.first().id)
+    }
+
     private fun entry(index: Int) = FavoriteEntry(
         source = FeedSource.DUMMY_JSON,
         itemId = index.toString(),

@@ -31,13 +31,22 @@ class FavoritesViewModel(
         loadPage(current.items.size)
     }
 
+    fun refresh() {
+        if (repository == null) return
+        val visibleLimit = maxOf(
+            FavoritesRepository.FAVORITES_PAGE_SIZE,
+            mutableUiState.value.items.size,
+        )
+        loadPage(offset = 0, limit = visibleLimit)
+    }
+
     private fun refreshPage() {
         if (repository != null) loadPage(0)
     }
 
-    private fun loadPage(offset: Int) {
+    private fun loadPage(offset: Int, limit: Int = FavoritesRepository.FAVORITES_PAGE_SIZE) {
         viewModelScope.launch(dispatcherProvider.io) {
-            val page = repository!!.getPage(offset)
+            val page = repository!!.getPage(offset, limit)
             val total = repository.count()
             val items = if (offset == 0) page else mutableUiState.value.items + page
             mutableUiState.value = FavoritesUiState(
