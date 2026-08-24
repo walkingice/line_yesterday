@@ -341,12 +341,12 @@ refresh 前的 sequence 與 cursor。
 
 ### Step 2.1：共用 domain 與 result contract
 
-- [ ] 建立 `FeedSource`、`FeedItem`、`DummyJsonItem`、`SpaceFlightItem`、
+- [x] 建立 `FeedSource`、`FeedItem`、`DummyJsonItem`、`SpaceFlightItem`、
   `Detail`、`PageCursor`、`DataError` 與共用 result type。
-- [ ] 建立 `NetworkStatusProvider`、`TimeProvider` 與 production／
+- [x] 建立 `NetworkStatusProvider`、`TimeProvider` 與 production／
   fake implementations。
-- [ ] 建立 injectable coroutine dispatcher provider。
-- [ ] 為 identity、cursor 與 fake provider 加入 unit tests。
+- [x] 建立 injectable coroutine dispatcher provider。
+- [x] 為 identity、cursor 與 fake provider 加入 unit tests。
 
 ### Step 2.2：DTO、parser 與 mapper
 
