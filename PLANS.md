@@ -401,7 +401,7 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
   domain models.
 - [x] The Feed parser produces items together with the next cursor/exhausted
   information.
-- [ ] Test valid JSON, empty pages, last pages, malformed JSON, missing required fields,
+- [x] Test valid JSON, empty pages, last pages, malformed JSON, missing required fields,
   the same id from different sources, and duplicate ids.
 
 ### Step 2.3: Mock Clients

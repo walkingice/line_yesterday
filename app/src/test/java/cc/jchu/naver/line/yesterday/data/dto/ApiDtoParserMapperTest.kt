@@ -102,12 +102,28 @@ class ApiDtoParserMapperTest {
         assertNotEquals(dummy.source to dummy.id, spaceFlight.source to spaceFlight.id)
     }
 
+    @Test
+    fun mapperPreservesDuplicateIdsForLaterSequenceDeduplication() {
+        val dto = DummyJsonFeedDto(
+            products = listOf(
+                DummyJsonItemFactory.dto(id = 1),
+                DummyJsonItemFactory.dto(id = 1),
+            ),
+            total = 2,
+            skip = 0,
+            limit = 2,
+        )
+        val items = ApiDtoMappers.run { dto.toDomainItems() }
+
+        assertEquals(listOf("1", "1"), items.map { it.id })
+    }
+
     private fun resource(name: String): String =
         checkNotNull(javaClass.classLoader?.getResource(name)).readText()
 }
 
 private object DummyJsonItemFactory {
-    fun create(id: Int) = DummyJsonProductDto(
+    fun dto(id: Int) = DummyJsonProductDto(
         id = id,
         title = "Product",
         description = "Description",
@@ -131,5 +147,7 @@ private object DummyJsonItemFactory {
         images = null,
         thumbnail = "image",
         message = null,
-    ).let { ApiDtoMappers.run { it.toDomainItem() } }
+    )
+
+    fun create(id: Int) = dto(id).let { ApiDtoMappers.run { it.toDomainItem() } }
 }
