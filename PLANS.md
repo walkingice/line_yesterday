@@ -603,7 +603,7 @@ Use Robolectric local JVM tests to verify:
 
 ### Step 6.1: DetailViewModel
 
-- [ ] Obtain `FeedSource` and id from saved state/creation arguments and validate the
+- [x] Obtain `FeedSource` and id from saved state/creation arguments and validate the
   input.
 - [ ] Start Detail loading only when the screen opens for the first time.
 - [ ] Collect `DetailLoadEvent` while preserving any stale detail already displayed.

@@ -16,7 +16,13 @@ class DetailActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentContainer.id, DetailFragment())
+                .replace(
+                    binding.fragmentContainer.id,
+                    DetailFragment.newInstance(
+                        intent.getStringExtra(EXTRA_SOURCE),
+                        intent.getStringExtra(EXTRA_ID),
+                    ),
+                )
                 .commit()
         }
     }

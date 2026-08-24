@@ -10,7 +10,11 @@ import cc.jchu.naver.line.yesterday.databinding.FragmentDetailBinding
 import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
 
 class DetailFragment : Fragment() {
-    private val viewModel by lazy { ViewModelProvider(this)[DetailViewModel::class.java] }
+    private val viewModel by lazy {
+        ViewModelProvider(this, DetailViewModel.Factory(detailArguments()))[
+            DetailViewModel::class.java
+        ]
+    }
     private val binding by viewBinding(FragmentDetailBinding::bind)
 
     override fun onCreateView(
@@ -25,18 +29,23 @@ class DetailFragment : Fragment() {
     }
 
     private fun screenLabel(): String =
-        if (hasValidArguments()) viewModel.screenName else "Invalid detail"
+        if (viewModel.isArgumentsValid) viewModel.screenName else "Invalid detail"
 
-    private fun hasValidArguments(): Boolean {
-        val source = activity?.intent?.getStringExtra(DetailActivity.EXTRA_SOURCE)
-        val id = activity?.intent?.getStringExtra(DetailActivity.EXTRA_ID)
-        return source in validSources && !id.isNullOrBlank()
-    }
+    private fun detailArguments(): DetailArguments? = DetailArguments.from(
+        arguments?.getString(ARG_SOURCE),
+        arguments?.getString(ARG_ID),
+    )
 
-    private companion object {
-        val validSources = setOf(
-            DetailActivity.SOURCE_DUMMY_JSON,
-            DetailActivity.SOURCE_SPACE_FLIGHT,
-        )
+    companion object {
+        private const val ARG_SOURCE = "source"
+        private const val ARG_ID = "id"
+
+        fun newInstance(source: String?, id: String?): DetailFragment =
+            DetailFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_SOURCE, source)
+                    putString(ARG_ID, id)
+                }
+            }
     }
 }
