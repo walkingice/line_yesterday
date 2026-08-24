@@ -387,12 +387,12 @@ exhausted. A failed source keeps its pre-refresh sequence and cursor.
 
 ### Step 2.1: Shared Domain and Result Contracts
 
-- [ ] Create `FeedSource`, `FeedItem`, `DummyJsonItem`, `SpaceFlightItem`, `Detail`,
+- [x] Create `FeedSource`, `FeedItem`, `DummyJsonItem`, `SpaceFlightItem`, `Detail`,
   `PageCursor`, `DataError`, and shared result types.
-- [ ] Create `NetworkStatusProvider`, `DelayProvider`, `TimeProvider`, and production/fake
+- [x] Create `NetworkStatusProvider`, `DelayProvider`, `TimeProvider`, and production/fake
   implementations.
-- [ ] Create an injectable coroutine dispatcher provider.
-- [ ] Add unit tests for identity, cursor, and fake providers.
+- [x] Create an injectable coroutine dispatcher provider.
+- [x] Add unit tests for identity, cursor, and fake providers.
 
 ### Step 2.2: DTOs, Parsers, and Mappers
 
