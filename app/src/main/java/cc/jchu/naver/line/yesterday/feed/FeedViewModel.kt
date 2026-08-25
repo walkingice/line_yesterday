@@ -2,6 +2,7 @@ package cc.jchu.naver.line.yesterday.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import android.util.Log
 import cc.jchu.naver.line.yesterday.data.domain.DataError
 import cc.jchu.naver.line.yesterday.data.domain.FeedFooterState
 import cc.jchu.naver.line.yesterday.data.domain.FeedItem
@@ -52,6 +53,7 @@ class FeedViewModel(
     }
 
     fun loadMoreItems() {
+        Log.d(TAG, "Load more requested")
         startLoadMore()
     }
 
@@ -75,7 +77,11 @@ class FeedViewModel(
     }
 
     private fun startLoadMore() {
-        if (!claimOperation()) return
+        val skippedReason = claimOperation()
+        if (skippedReason != null) {
+            Log.d(TAG, "No feed page requested: $skippedReason")
+            return
+        }
         viewModelScope.launch(dispatcherProvider.io) {
             try {
                 val outcomes = loadSources(forceRefresh = false)
@@ -102,17 +108,25 @@ class FeedViewModel(
 
     private suspend fun loadSources(forceRefresh: Boolean): List<SourceOutcome> = coroutineScope {
         val dummy = if (forceRefresh || !dummyState.exhausted) async {
+            Log.d(TAG, "Requesting DummyJson feed cursor=${PageCursor("0")}")
             SourceOutcome(
                 FeedSource.DUMMY_JSON,
                 dummyJsonRepository!!.getFeedPage(PageCursor("0"), forceRefresh),
             )
-        } else null
+        } else {
+            Log.d(TAG, "No DummyJson feed requested: source is exhausted")
+            null
+        }
         val space = if (forceRefresh || !spaceState.exhausted) async {
+            Log.d(TAG, "Requesting SpaceFlight feed cursor=${PageCursor("0")}")
             SourceOutcome(
                 FeedSource.SPACE_FLIGHT,
                 spaceFlightRepository!!.getFeedPage(PageCursor("0"), forceRefresh),
             )
-        } else null
+        } else {
+            Log.d(TAG, "No SpaceFlight feed requested: source is exhausted")
+            null
+        }
         listOfNotNull(dummy?.await(), space?.await())
     }
 
@@ -170,13 +184,18 @@ class FeedViewModel(
     private fun hasRepositories(): Boolean =
         dummyJsonRepository != null && spaceFlightRepository != null
 
-    private fun claimOperation(): Boolean = synchronized(operationLock) {
-        if (!hasRepositories() || operationRunning || mutableUiState.value.refreshing ||
-            mutableUiState.value.footerState == FeedFooterState.NoMoreItems
-        ) return false
+    private fun claimOperation(): String? = synchronized(operationLock) {
+        val skippedReason = when {
+            !hasRepositories() -> "repositories are unavailable"
+            operationRunning -> "another operation is running"
+            mutableUiState.value.refreshing -> "a refresh is running"
+            mutableUiState.value.footerState == FeedFooterState.NoMoreItems -> "all sources are exhausted"
+            else -> null
+        }
+        if (skippedReason != null) return skippedReason
         operationRunning = true
         mutableUiState.value = mutableUiState.value.copy(footerState = FeedFooterState.Loading)
-        true
+        null
     }
 
     private fun claimRefresh(): Boolean = synchronized(operationLock) {
@@ -191,6 +210,10 @@ class FeedViewModel(
 
     private fun releaseOperation() = synchronized(operationLock) {
         operationRunning = false
+    }
+
+    private companion object {
+        const val TAG = "FeedViewModel"
     }
 }
 

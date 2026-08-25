@@ -1,6 +1,7 @@
 package cc.jchu.naver.line.yesterday.feed
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +46,7 @@ class FeedFragment : Fragment() {
             },
             onFooterClick = {
                 val state = viewModel.uiState.value.footerState
+                Log.d(TAG, "Load more footer clicked: state=$state")
                 handleFooterAction(state, viewModel::loadMoreItems, viewModel::loadMoreItems)
             },
         )
@@ -66,6 +68,9 @@ class FeedFragment : Fragment() {
         }
     }
 
+    private companion object {
+        const val TAG = "FeedFragment"
+    }
 }
 
 internal class FeedItemSpacingDecoration(

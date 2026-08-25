@@ -10,6 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.shadows.ShadowLog
 
 @RunWith(RobolectricTestRunner::class)
 class ClientsTest {
@@ -59,14 +60,33 @@ class ClientsTest {
     }
 
     @Test
+    fun mockClientLogsTheAssetPathBeforeReading() = runBlocking {
+        ShadowLog.clear()
+
+        dummyJson.getProducts(PageCursor("10"))
+
+        assertTrue(
+            ShadowLog.getLogsForTag("DummyJsonClientMock").any {
+                it.msg == "Reading mock asset: path=dummy_json/feeds/page_1.json"
+            },
+        )
+    }
+
+    @Test
     fun offlineRequestReturnsOfflineWithoutReadingAsset() = runBlocking {
         network.online = false
+        ShadowLog.clear()
 
         val result = dummyJson.getProduct("missing")
 
         assertEquals(ClientResult.Offline, result)
         assertEquals(1, delay.calls)
         assertEquals(1, network.calls)
+        assertTrue(
+            ShadowLog.getLogsForTag("DummyJsonClientMock").any {
+                it.msg == "No asset read: device is offline; path=dummy_json/details/product_missing.json"
+            },
+        )
     }
 
     @Test

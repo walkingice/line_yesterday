@@ -1,6 +1,7 @@
 package cc.jchu.naver.line.yesterday.data.client
 
 import android.content.Context
+import android.util.Log
 import cc.jchu.naver.line.yesterday.data.domain.ClientResult
 import cc.jchu.naver.line.yesterday.data.domain.PageCursor
 import cc.jchu.naver.line.yesterday.data.provider.NetworkStatusProvider
@@ -63,8 +64,16 @@ class DummyJsonClientMock(
 
     private suspend fun request(path: String): ClientResult {
         delayProvider.await()
-        if (!networkStatusProvider.isOnline()) return ClientResult.Offline
+        if (!networkStatusProvider.isOnline()) {
+            Log.d(TAG, "No asset read: device is offline; path=$path")
+            return ClientResult.Offline
+        }
+        Log.d(TAG, "Reading mock asset: path=$path")
         return assetReader.read(path)
+    }
+
+    private companion object {
+        const val TAG = "DummyJsonClientMock"
     }
 }
 
@@ -83,8 +92,16 @@ class SpaceFlightClientMock(
 
     private suspend fun request(path: String): ClientResult {
         delayProvider.await()
-        if (!networkStatusProvider.isOnline()) return ClientResult.Offline
+        if (!networkStatusProvider.isOnline()) {
+            Log.d(TAG, "No asset read: device is offline; path=$path")
+            return ClientResult.Offline
+        }
+        Log.d(TAG, "Reading mock asset: path=$path")
         return assetReader.read(path)
+    }
+
+    private companion object {
+        const val TAG = "SpaceFlightClientMock"
     }
 }
 
