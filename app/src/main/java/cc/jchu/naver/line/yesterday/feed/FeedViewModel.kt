@@ -107,21 +107,23 @@ class FeedViewModel(
     )
 
     private suspend fun loadSources(forceRefresh: Boolean): List<SourceOutcome> = coroutineScope {
+        val dummyCursor = cursorFor(dummyState, forceRefresh)
         val dummy = if (forceRefresh || !dummyState.exhausted) async {
-            Log.d(TAG, "Requesting DummyJson feed cursor=${PageCursor("0")}")
+            Log.d(TAG, "Requesting DummyJson feed cursor=$dummyCursor")
             SourceOutcome(
                 FeedSource.DUMMY_JSON,
-                dummyJsonRepository!!.getFeedPage(PageCursor("0"), forceRefresh),
+                dummyJsonRepository!!.getFeedPage(dummyCursor, forceRefresh),
             )
         } else {
             Log.d(TAG, "No DummyJson feed requested: source is exhausted")
             null
         }
+        val spaceCursor = cursorFor(spaceState, forceRefresh)
         val space = if (forceRefresh || !spaceState.exhausted) async {
-            Log.d(TAG, "Requesting SpaceFlight feed cursor=${PageCursor("0")}")
+            Log.d(TAG, "Requesting SpaceFlight feed cursor=$spaceCursor")
             SourceOutcome(
                 FeedSource.SPACE_FLIGHT,
-                spaceFlightRepository!!.getFeedPage(PageCursor("0"), forceRefresh),
+                spaceFlightRepository!!.getFeedPage(spaceCursor, forceRefresh),
             )
         } else {
             Log.d(TAG, "No SpaceFlight feed requested: source is exhausted")
@@ -129,6 +131,9 @@ class FeedViewModel(
         }
         listOfNotNull(dummy?.await(), space?.await())
     }
+
+    private fun cursorFor(state: SourceState, forceRefresh: Boolean): PageCursor =
+        if (forceRefresh) PageCursor("0") else state.cursor
 
     private fun applyLoadResults(outcomes: List<SourceOutcome>) {
         outcomes.forEach { outcome ->
