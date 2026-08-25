@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".detail.DetailActivity" />
-        <activity android:name=".favorites.FavoritesActivity" />
+        <activity
+            android:name=".favorites.FavoritesActivity"
+            android:theme="@style/Theme.LINEYesterday.Favorites" />
     </application>
 </manifest>

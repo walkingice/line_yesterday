@@ -44,6 +44,17 @@ class FavoritesActivityTest {
     }
 
     @Test
+    fun usesPinkPrimaryColorForTopAppBar() {
+        val activity = Robolectric.buildActivity(FavoritesActivity::class.java).setup().get()
+        val attributes = activity.obtainStyledAttributes(
+            intArrayOf(androidx.appcompat.R.attr.colorPrimary),
+        )
+
+        assertEquals(activity.getColor(R.color.pink_500), attributes.getColor(0, 0))
+        attributes.recycle()
+    }
+
+    @Test
     fun hasNoOptionsMenuAndBackFinishes() {
         val activity = Robolectric.buildActivity(FavoritesActivity::class.java).setup().get()
         val menu = MenuBuilder(activity)
