@@ -45,7 +45,6 @@ class FavoritesFragment : Fragment() {
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
-        binding.swipeRefresh.setOnRefreshListener { viewModel.refresh() }
         binding.screenName.text = viewModel.screenName
         binding.screenName.contentDescription = viewModel.screenName
         viewLifecycleOwner.lifecycleScope.launch {
@@ -78,8 +77,13 @@ internal fun renderFavoritesState(
     adapter: FeedAdapter,
     state: cc.jchu.naver.line.yesterday.data.domain.FavoritesUiState,
 ) {
-    adapter.submitFeed(state.items, state.footerState)
-    binding.swipeRefresh.isRefreshing = false
+    val shouldResetListPosition = adapter.currentList.none { it is FeedAdapter.Row.Item } &&
+        state.items.isNotEmpty()
+    adapter.submitFeed(state.items, state.footerState) {
+        if (shouldResetListPosition) {
+            binding.recyclerView.scrollToPosition(0)
+        }
+    }
     binding.emptyContent.visibility = if (state.items.isEmpty()) View.VISIBLE else View.GONE
     binding.recyclerView.visibility = View.VISIBLE
 }
