@@ -15,6 +15,7 @@ object ApiDtoMappers {
         title = requireNotNull(title) { "DummyJson product title is required" },
         imgUrl = requireNotNull(thumbnail) { "DummyJson product thumbnail is required" },
         category = requireNotNull(category) { "DummyJson product category is required" },
+        time = meta?.createdAt.orEmpty(),
     )
 
     fun DummyJsonProductDto.toDetail(): Detail = Detail(
@@ -24,6 +25,7 @@ object ApiDtoMappers {
         imgUrl = requireNotNull(thumbnail) { "DummyJson product thumbnail is required" },
         description = requireNotNull(description) { "DummyJson product description is required" },
         extraInformation = requireNotNull(category) { "DummyJson product category is required" },
+        time = meta?.createdAt.orEmpty(),
     )
 
     fun SpaceFlightFeedDto.toDomainItems(): List<FeedItem> =
@@ -34,6 +36,7 @@ object ApiDtoMappers {
         title = requireNotNull(title) { "SpaceFlight article title is required" },
         imgUrl = requireNotNull(imageUrl) { "SpaceFlight article image URL is required" },
         description = requireNotNull(summary) { "SpaceFlight article summary is required" },
+        time = publishedAt.orEmpty(),
     )
 
     fun SpaceFlightArticleDto.toDetail(): Detail = Detail(
@@ -43,5 +46,6 @@ object ApiDtoMappers {
         imgUrl = requireNotNull(imageUrl) { "SpaceFlight article image URL is required" },
         description = requireNotNull(summary) { "SpaceFlight article summary is required" },
         extraInformation = requireNotNull(newsSite) { "SpaceFlight article news site is required" },
+        time = publishedAt.orEmpty(),
     )
 }

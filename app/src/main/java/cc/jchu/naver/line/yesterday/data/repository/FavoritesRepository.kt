@@ -72,13 +72,14 @@ class FavoritesRepository(
                 imgUrl = detail.imgUrl,
                 description = detail.description,
                 extraInformation = detail.extraInformation,
+                time = detail.time,
             ),
         )
     }
 
     private fun Detail.toFeedItem(): FeedItem = when (source) {
-        FeedSource.DUMMY_JSON -> DummyJsonItem(id, title, imgUrl, extraInformation)
-        FeedSource.SPACE_FLIGHT -> SpaceFlightItem(id, title, imgUrl, description)
+        FeedSource.DUMMY_JSON -> DummyJsonItem(id, title, imgUrl, extraInformation, time)
+        FeedSource.SPACE_FLIGHT -> SpaceFlightItem(id, title, imgUrl, description, time)
     }
 
     private fun FeedItem.toEntry(addedAt: Long): FavoriteEntry = FavoriteEntry(
@@ -95,11 +96,12 @@ class FavoritesRepository(
             is DummyJsonItem -> category
             is SpaceFlightItem -> description
         },
+        time = time,
     )
 
     private fun FavoriteEntry.toItem(): FeedItem = when (source) {
-        FeedSource.DUMMY_JSON -> DummyJsonItem(itemId, title, imgUrl, extraInformation)
-        FeedSource.SPACE_FLIGHT -> SpaceFlightItem(itemId, title, imgUrl, description)
+        FeedSource.DUMMY_JSON -> DummyJsonItem(itemId, title, imgUrl, extraInformation, time)
+        FeedSource.SPACE_FLIGHT -> SpaceFlightItem(itemId, title, imgUrl, description, time)
     }
 
     companion object {

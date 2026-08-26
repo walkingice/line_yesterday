@@ -19,6 +19,7 @@ data class FavoriteEntity(
     val imgUrl: String,
     val description: String,
     val extraInformation: String,
+    val time: String = "",
 )
 
 @Dao
@@ -50,6 +51,7 @@ data class FavoriteEntry(
     val imgUrl: String,
     val description: String,
     val extraInformation: String,
+    val time: String = "",
 )
 
 interface FavoriteStore {
@@ -88,6 +90,7 @@ private fun FavoriteEntry.toEntity(addedAt: Long) = FavoriteEntity(
     imgUrl = imgUrl,
     description = description,
     extraInformation = extraInformation,
+    time = time,
 )
 
 private fun FavoriteEntity.toEntry() = FavoriteEntry(
@@ -98,6 +101,7 @@ private fun FavoriteEntity.toEntry() = FavoriteEntry(
     imgUrl = imgUrl,
     description = description,
     extraInformation = extraInformation,
+    time = time,
 )
 
 private fun FeedSource.databaseValue(): Int = when (this) {

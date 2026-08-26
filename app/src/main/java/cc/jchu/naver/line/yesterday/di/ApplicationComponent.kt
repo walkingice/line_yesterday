@@ -48,7 +48,7 @@ class ApplicationComponent private constructor(
                 applicationContext,
                 AppDatabase::class.java,
                 DATABASE_NAME,
-            ).build()
+            ).addMigrations(AppDatabase.MIGRATION_1_2).build()
             val jsonCacheStore = RoomJsonCacheStore(database.jsonCacheDao())
             val favoriteStore = RoomFavoriteStore(database.favoriteDao())
             val timeProvider = SystemTimeProvider()

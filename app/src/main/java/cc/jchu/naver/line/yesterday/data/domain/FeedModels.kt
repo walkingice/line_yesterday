@@ -13,6 +13,7 @@ sealed interface FeedItem {
     val source: FeedSource
     val title: String
     val imgUrl: String
+    val time: String
 }
 
 data class DummyJsonItem(
@@ -20,6 +21,7 @@ data class DummyJsonItem(
     override val title: String,
     override val imgUrl: String,
     val category: String,
+    override val time: String = "",
 ) : FeedItem {
     override val source: FeedSource = FeedSource.DUMMY_JSON
 }
@@ -29,6 +31,7 @@ data class SpaceFlightItem(
     override val title: String,
     override val imgUrl: String,
     val description: String,
+    override val time: String = "",
 ) : FeedItem {
     override val source: FeedSource = FeedSource.SPACE_FLIGHT
 }
@@ -40,4 +43,10 @@ data class Detail(
     val imgUrl: String,
     val description: String,
     val extraInformation: String,
+    val time: String = "",
 )
+
+fun FeedSource.displayName(): String = when (this) {
+    FeedSource.DUMMY_JSON -> "DummyJson"
+    FeedSource.SPACE_FLIGHT -> "SpaceFlight"
+}

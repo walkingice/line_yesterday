@@ -34,6 +34,30 @@ class ApiDtoParserMapperTest {
     }
 
     @Test
+    fun mapsSourceSpecificTimesToDomainItems() {
+        val dummy = DummyJsonItemFactory.dto(id = 1).copy(
+            meta = DummyJsonMetaDto("2025-04-30T09:41:02.053Z", null, null, null),
+        ).let { ApiDtoMappers.run { it.toDomainItem() } }
+        val spaceFlight = SpaceFlightArticleDto(
+            id = 2,
+            title = "Article",
+            authors = null,
+            url = null,
+            imageUrl = "image",
+            newsSite = "site",
+            summary = "summary",
+            publishedAt = "2026-08-25T14:57:26Z",
+            updatedAt = null,
+            featured = null,
+            launches = null,
+            events = null,
+        ).let { ApiDtoMappers.run { it.toDomainItem() } }
+
+        assertEquals("2025-04-30T09:41:02.053Z", dummy.time)
+        assertEquals("2026-08-25T14:57:26Z", spaceFlight.time)
+    }
+
+    @Test
     fun emptyFeedMapsToEmptyDomainList() {
         val dto = DummyJsonFeedDto(products = emptyList(), total = 0, skip = 0, limit = 10)
 

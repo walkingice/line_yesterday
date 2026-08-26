@@ -14,7 +14,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class FavoritesRepositoryTest {
-    private val item = DummyJsonItem("1", "One", "image", "cat")
+    private val item = DummyJsonItem("1", "One", "image", "cat", "2025-04-30T09:41:02.053Z")
 
     @Test
     fun addRemoveAndToggleAreLocalOperations() = runBlocking {
