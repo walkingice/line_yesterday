@@ -143,7 +143,7 @@ class DummyJsonClientReal internal constructor(
         return requestRealJson(
             networkStatusProvider = networkStatusProvider,
             responseFetcher = responseFetcher,
-            url = "$PRODUCTS_URL?limit=$PAGE_SIZE&select=title,category,thumbnail&skip=$skip",
+            url = "$PRODUCTS_URL?limit=$PAGE_SIZE&select=title,category,thumbnail,meta&skip=$skip",
             tag = TAG,
         )
     }
