@@ -16,6 +16,10 @@ import cc.jchu.naver.line.yesterday.data.repository.FavoritesRepository
 import cc.jchu.naver.line.yesterday.data.repository.SpaceFlightRepository
 import com.linecorp.lich.component.ComponentFactory
 import com.linecorp.lich.component.getComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 class ApplicationComponent private constructor(
     val applicationContext: Context,
@@ -28,9 +32,14 @@ class ApplicationComponent private constructor(
     val favoritesRepository: FavoritesRepository,
     val feedViewModelFactory: FeedViewModelFactory,
     val favoritesViewModelFactory: FavoritesViewModelFactory,
+    private val cacheClearScope: CoroutineScope,
 ) {
     fun detailViewModelFactory(arguments: cc.jchu.naver.line.yesterday.detail.DetailArguments?) =
         DetailViewModelFactory(arguments, detailRepository, favoritesRepository)
+
+    fun clearJsonCache() {
+        cacheClearScope.launch { database.jsonCacheDao().clearAll() }
+    }
 
     companion object : ComponentFactory<ApplicationComponent>() {
         override fun createComponent(context: Context): ApplicationComponent {
@@ -69,6 +78,7 @@ class ApplicationComponent private constructor(
                     spaceFlightRepository,
                 ),
                 favoritesViewModelFactory = FavoritesViewModelFactory(favoritesRepository),
+                cacheClearScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
             )
         }
 

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.data.settings.ClientSettings
 import cc.jchu.naver.line.yesterday.databinding.FragmentSettingsBinding
+import cc.jchu.naver.line.yesterday.di.applicationComponent
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
@@ -31,6 +32,7 @@ class SettingsFragment : Fragment() {
                 settings.useRealClient = isChecked
                 Toast.makeText(requireContext(), R.string.settings_restart_required, Toast.LENGTH_SHORT)
                     .show()
+                requireContext().applicationComponent().clearJsonCache()
             }
         }
     }

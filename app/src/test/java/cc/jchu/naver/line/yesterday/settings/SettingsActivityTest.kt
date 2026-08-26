@@ -3,7 +3,13 @@ package cc.jchu.naver.line.yesterday.settings
 import android.content.Context
 import com.google.android.material.switchmaterial.SwitchMaterial
 import cc.jchu.naver.line.yesterday.R
+import cc.jchu.naver.line.yesterday.data.cache.CacheType
+import cc.jchu.naver.line.yesterday.data.cache.JsonCacheEntity
 import cc.jchu.naver.line.yesterday.data.settings.ClientSettings
+import cc.jchu.naver.line.yesterday.di.applicationComponent
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -43,6 +49,28 @@ class SettingsActivityTest {
 
         assertTrue(ClientSettings(context).useRealClient)
         assertEquals("Restart the app to apply this change", ShadowToast.getTextOfLatestToast())
+    }
+
+    @Test
+    fun toggleClearsJsonCache() = runBlocking {
+        val database = context.applicationComponent().database
+        database.jsonCacheDao().upsert(
+            JsonCacheEntity(
+                timestamp = 1L,
+                type = CacheType.DUMMY_JSON_FEED.databaseValue,
+                cacheKey = "0",
+                jsonString = "cached",
+            ),
+        )
+        val activity = Robolectric.buildActivity(SettingsActivity::class.java).setup().get()
+
+        activity.findViewById<SwitchMaterial>(R.id.use_real_client).isChecked = true
+
+        withTimeout(1_000) {
+            while (database.jsonCacheDao().get(CacheType.DUMMY_JSON_FEED.databaseValue, "0") != null) {
+                delay(10)
+            }
+        }
     }
 
     @Test
