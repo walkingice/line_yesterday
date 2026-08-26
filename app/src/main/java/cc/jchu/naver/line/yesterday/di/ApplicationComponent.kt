@@ -2,22 +2,20 @@ package cc.jchu.naver.line.yesterday.di
 
 import android.content.Context
 import androidx.room.Room
-import com.linecorp.lich.component.ComponentFactory
-import com.linecorp.lich.component.getComponent
 import cc.jchu.naver.line.yesterday.data.cache.RoomJsonCacheStore
-import cc.jchu.naver.line.yesterday.data.client.DummyJsonClientMock
-import cc.jchu.naver.line.yesterday.data.client.SpaceFlightClientMock
+import cc.jchu.naver.line.yesterday.data.client.DummyJsonClient
+import cc.jchu.naver.line.yesterday.data.client.SpaceFlightClient
 import cc.jchu.naver.line.yesterday.data.database.AppDatabase
 import cc.jchu.naver.line.yesterday.data.favorite.RoomFavoriteStore
-import cc.jchu.naver.line.yesterday.data.provider.ConnectivityNetworkStatusProvider
 import cc.jchu.naver.line.yesterday.data.provider.DemoNetworkStatusProvider
-import cc.jchu.naver.line.yesterday.data.provider.NetworkStatusProvider
 import cc.jchu.naver.line.yesterday.data.provider.SystemTimeProvider
 import cc.jchu.naver.line.yesterday.data.provider.TimeProvider
 import cc.jchu.naver.line.yesterday.data.repository.DetailRepository
 import cc.jchu.naver.line.yesterday.data.repository.DummyJsonRepository
 import cc.jchu.naver.line.yesterday.data.repository.FavoritesRepository
 import cc.jchu.naver.line.yesterday.data.repository.SpaceFlightRepository
+import com.linecorp.lich.component.ComponentFactory
+import com.linecorp.lich.component.getComponent
 
 class ApplicationComponent private constructor(
     val applicationContext: Context,
@@ -45,16 +43,13 @@ class ApplicationComponent private constructor(
             val jsonCacheStore = RoomJsonCacheStore(database.jsonCacheDao())
             val favoriteStore = RoomFavoriteStore(database.favoriteDao())
             val timeProvider = SystemTimeProvider()
-            val networkStatusProvider = DemoNetworkStatusProvider(
-                ConnectivityNetworkStatusProvider(applicationContext),
-            )
             val dummyJsonRepository = DummyJsonRepository(
-                client = DummyJsonClientMock(applicationContext, networkStatusProvider),
+                client = context.getComponent(DummyJsonClient),
                 cacheStore = jsonCacheStore,
                 timeProvider = timeProvider,
             )
             val spaceFlightRepository = SpaceFlightRepository(
-                client = SpaceFlightClientMock(applicationContext, networkStatusProvider),
+                client = context.getComponent(SpaceFlightClient),
                 cacheStore = jsonCacheStore,
                 timeProvider = timeProvider,
             )
@@ -64,7 +59,7 @@ class ApplicationComponent private constructor(
                 applicationContext = applicationContext,
                 database = database,
                 timeProvider = timeProvider,
-                networkStatusProvider = networkStatusProvider,
+                networkStatusProvider = context.getComponent(DemoNetworkStatusProvider),
                 dummyJsonRepository = dummyJsonRepository,
                 spaceFlightRepository = spaceFlightRepository,
                 detailRepository = detailRepository,

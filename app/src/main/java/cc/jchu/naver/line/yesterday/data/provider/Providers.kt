@@ -3,6 +3,7 @@ package cc.jchu.naver.line.yesterday.data.provider
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.linecorp.lich.component.ComponentFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -54,6 +55,11 @@ class DemoNetworkStatusProvider(
 
     override fun clearOverride() {
         override = null
+    }
+
+    companion object : ComponentFactory<DemoNetworkStatusProvider>() {
+        override fun createComponent(context: Context): DemoNetworkStatusProvider =
+            DemoNetworkStatusProvider(ConnectivityNetworkStatusProvider(context))
     }
 }
 

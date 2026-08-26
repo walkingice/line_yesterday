@@ -4,7 +4,10 @@ import android.content.Context
 import android.util.Log
 import cc.jchu.naver.line.yesterday.data.domain.ClientResult
 import cc.jchu.naver.line.yesterday.data.domain.PageCursor
+import cc.jchu.naver.line.yesterday.data.provider.DemoNetworkStatusProvider
 import cc.jchu.naver.line.yesterday.data.provider.NetworkStatusProvider
+import com.linecorp.lich.component.ComponentFactory
+import com.linecorp.lich.component.getComponent
 import kotlinx.coroutines.delay
 import java.io.IOException
 import java.net.URI
@@ -13,12 +16,32 @@ interface DummyJsonClient {
     suspend fun getProducts(cursor: PageCursor): ClientResult
 
     suspend fun getProduct(id: String): ClientResult
+
+    companion object : ComponentFactory<DummyJsonClient>() {
+        private const val TAG: String = "DummyJsonClient"
+        override fun createComponent(context: Context): DummyJsonClient {
+            val networkStatusProvider = context.getComponent(DemoNetworkStatusProvider)
+
+            Log.d(TAG, "Create DummyJsonClient by using Mock implementation")
+            return DummyJsonClientMock(context, networkStatusProvider)
+        }
+    }
 }
 
 interface SpaceFlightClient {
     suspend fun getArticles(cursor: PageCursor): ClientResult
 
     suspend fun getArticle(id: String): ClientResult
+
+    companion object : ComponentFactory<SpaceFlightClient>() {
+        private const val TAG: String = "SpaceFlightClient"
+        override fun createComponent(context: Context): SpaceFlightClient {
+            val networkStatusProvider = context.getComponent(DemoNetworkStatusProvider)
+
+            Log.d(TAG, "Create SpaceFlightClient by using Mock implementation")
+            return SpaceFlightClientMock(context, networkStatusProvider)
+        }
+    }
 }
 
 fun interface ClientDelayProvider {
