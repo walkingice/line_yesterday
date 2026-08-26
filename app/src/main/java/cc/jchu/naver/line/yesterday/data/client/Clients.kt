@@ -47,7 +47,7 @@ internal fun createDummyJsonClient(
 ): DummyJsonClient {
     if (ClientSettings(context).useRealClient) {
         Log.d("DummyJsonClient", "Create DummyJsonClient by using REAL implementation")
-        return DummyJsonClientMock(context, networkStatusProvider)
+        return DummyJsonClientReal(context, networkStatusProvider)
     }
     Log.d("DummyJsonClient", "Create DummyJsonClient by using Mock implementation")
     return DummyJsonClientMock(context, networkStatusProvider)
@@ -59,7 +59,7 @@ internal fun createSpaceFlightClient(
 ): SpaceFlightClient {
     if (ClientSettings(context).useRealClient) {
         Log.d("SpaceFlightClient", "Create SpaceFlightClient by using REAL implementation")
-        return SpaceFlightClientMock(context, networkStatusProvider)
+        return SpaceFlightClientReal(context, networkStatusProvider)
     }
     Log.d("SpaceFlightClient", "Create SpaceFlightClient by using Mock implementation")
     return SpaceFlightClientMock(context, networkStatusProvider)
@@ -121,6 +121,27 @@ class DummyJsonClientMock(
     }
 }
 
+class DummyJsonClientReal(
+    context: Context,
+    private val networkStatusProvider: NetworkStatusProvider
+) : DummyJsonClient {
+
+    override suspend fun getProducts(cursor: PageCursor): ClientResult {
+        // use this API endpoint to get real JSON file
+        // val index = cursor.toDummyPageIndex()
+        // val limit = 5
+        // val skip = index * limit
+        // https://dummyjson.com/products?limit={limit}&select=title,category,thumbnail&skip={skip}
+        TODO()
+    }
+
+    override suspend fun getProduct(id: String): ClientResult {
+        // use this API endpoint to get real JSON file
+        // https://dummyjson.com/products/{id}
+        TODO()
+    }
+}
+
 class SpaceFlightClientMock(
     context: Context,
     private val networkStatusProvider: NetworkStatusProvider,
@@ -147,6 +168,27 @@ class SpaceFlightClientMock(
     private companion object {
         const val TAG = "SpaceFlightClientMock"
     }
+}
+
+class SpaceFlightClientReal(
+    context: Context,
+    private val networkStatusProvider: NetworkStatusProvider
+) : SpaceFlightClient {
+    override suspend fun getArticles(cursor: PageCursor): ClientResult {
+        // use this API endpoint to get real JSON file
+        // val index = cursor.toSpaceFlightPageIndex()
+        // val limit = 10
+        // val offset = index * limit
+        // https://api.spaceflightnewsapi.net/v4/articles/?format=json&limit={limit}&offset={offset}
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getArticle(id: String): ClientResult {
+        // use this API endpoint to get real JSON file
+        // https://api.spaceflightnewsapi.net/v4/articles/{id}/?format=json
+        TODO("Not yet implemented")
+    }
+
 }
 
 private fun PageCursor.toDummyPageIndex(): Int? = value.toIntOrNull()
