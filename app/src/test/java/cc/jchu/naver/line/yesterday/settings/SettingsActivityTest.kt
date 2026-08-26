@@ -1,11 +1,15 @@
 package cc.jchu.naver.line.yesterday.settings
 
+import android.content.Context
 import com.google.android.material.switchmaterial.SwitchMaterial
 import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.data.settings.ClientSettings
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -15,10 +19,21 @@ import org.robolectric.shadows.ShadowToast
 
 @RunWith(RobolectricTestRunner::class)
 class SettingsActivityTest {
+    private val context = RuntimeEnvironment.getApplication()
+
+    @Before
+    fun clearSettings() {
+        context.getSharedPreferences(ClientSettings.PREFERENCES_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .clear()
+            .commit()
+    }
+
+    @After
+    fun clearSettingsAfterTest() = clearSettings()
+
     @Test
     fun togglePersistsSettingAndShowsRestartToast() {
-        val context = RuntimeEnvironment.getApplication()
-        ClientSettings(context).useRealClient = false
         val activity = Robolectric.buildActivity(SettingsActivity::class.java).setup().get()
         val toggle = activity.findViewById<SwitchMaterial>(R.id.use_real_client)
 
@@ -28,7 +43,18 @@ class SettingsActivityTest {
 
         assertTrue(ClientSettings(context).useRealClient)
         assertEquals("Restart the app to apply this change", ShadowToast.getTextOfLatestToast())
-        ClientSettings(context).useRealClient = false
+    }
+
+    @Test
+    fun assigningExistingValueDoesNotShowRestartToast() {
+        ClientSettings(context).useRealClient = true
+        val activity = Robolectric.buildActivity(SettingsActivity::class.java).setup().get()
+        val toggle = activity.findViewById<SwitchMaterial>(R.id.use_real_client)
+        ShadowToast.reset()
+
+        toggle.isChecked = true
+
+        assertNull(ShadowToast.getTextOfLatestToast())
     }
 
     @Test

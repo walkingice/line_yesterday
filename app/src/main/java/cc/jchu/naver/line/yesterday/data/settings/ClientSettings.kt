@@ -16,6 +16,6 @@ class ClientSettings(context: Context) {
 
     companion object {
         const val USE_REAL_CLIENT = "USE_REAL_CLIENT"
-        private const val PREFERENCES_NAME = "client_settings"
+        internal const val PREFERENCES_NAME = "client_settings"
     }
 }

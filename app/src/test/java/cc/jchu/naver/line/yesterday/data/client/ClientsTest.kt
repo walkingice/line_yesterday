@@ -1,5 +1,6 @@
 package cc.jchu.naver.line.yesterday.data.client
 
+import android.content.Context
 import cc.jchu.naver.line.yesterday.data.domain.ClientResult
 import cc.jchu.naver.line.yesterday.data.domain.PageCursor
 import cc.jchu.naver.line.yesterday.data.provider.NetworkStatusProvider
@@ -7,6 +8,8 @@ import cc.jchu.naver.line.yesterday.data.settings.ClientSettings
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -21,6 +24,17 @@ class ClientsTest {
     private val delay = RecordingDelayProvider(events)
     private val dummyJson = DummyJsonClientMock(context, network, delay)
     private val spaceFlight = SpaceFlightClientMock(context, network, delay)
+
+    @Before
+    fun clearSettings() {
+        context.getSharedPreferences(ClientSettings.PREFERENCES_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .clear()
+            .commit()
+    }
+
+    @After
+    fun clearSettingsAfterTest() = clearSettings()
 
     @Test
     fun dummyJsonReturnsRawFeedAndDetailFixturesForEveryPreparedMapping() = runBlocking {
@@ -121,7 +135,6 @@ class ClientsTest {
         assertTrue(createSpaceFlightClient(context, network) is SpaceFlightClientMock)
         assertFactoryLog("DummyJsonClient", "REAL")
         assertFactoryLog("SpaceFlightClient", "REAL")
-        ClientSettings(context).useRealClient = false
     }
 
     private fun assertFactoryLog(tag: String, implementation: String) {
