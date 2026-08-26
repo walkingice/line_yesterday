@@ -3,6 +3,7 @@ package cc.jchu.naver.line.yesterday.data.client
 import cc.jchu.naver.line.yesterday.data.domain.ClientResult
 import cc.jchu.naver.line.yesterday.data.domain.PageCursor
 import cc.jchu.naver.line.yesterday.data.provider.NetworkStatusProvider
+import cc.jchu.naver.line.yesterday.data.settings.ClientSettings
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -101,6 +102,34 @@ class ClientsTest {
         val result = dummyJson.getProducts(PageCursor("15"))
 
         assertTrue(result is ClientResult.Failure)
+    }
+
+    @Test
+    fun factoriesUseMockClientsForBothPreferenceValues() {
+        ClientSettings(context).useRealClient = false
+        ShadowLog.clear()
+
+        assertTrue(createDummyJsonClient(context, network) is DummyJsonClientMock)
+        assertTrue(createSpaceFlightClient(context, network) is SpaceFlightClientMock)
+        assertFactoryLog("DummyJsonClient", "Mock")
+        assertFactoryLog("SpaceFlightClient", "Mock")
+
+        ClientSettings(context).useRealClient = true
+        ShadowLog.clear()
+
+        assertTrue(createDummyJsonClient(context, network) is DummyJsonClientMock)
+        assertTrue(createSpaceFlightClient(context, network) is SpaceFlightClientMock)
+        assertFactoryLog("DummyJsonClient", "REAL")
+        assertFactoryLog("SpaceFlightClient", "REAL")
+        ClientSettings(context).useRealClient = false
+    }
+
+    private fun assertFactoryLog(tag: String, implementation: String) {
+        assertTrue(
+            ShadowLog.getLogsForTag(tag).any {
+                it.msg == "Create $tag by using $implementation implementation"
+            },
+        )
     }
 
     private fun assertRawAsset(result: ClientResult, path: String) {

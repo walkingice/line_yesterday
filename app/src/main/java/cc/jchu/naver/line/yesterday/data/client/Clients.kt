@@ -6,6 +6,7 @@ import cc.jchu.naver.line.yesterday.data.domain.ClientResult
 import cc.jchu.naver.line.yesterday.data.domain.PageCursor
 import cc.jchu.naver.line.yesterday.data.provider.DemoNetworkStatusProvider
 import cc.jchu.naver.line.yesterday.data.provider.NetworkStatusProvider
+import cc.jchu.naver.line.yesterday.data.settings.ClientSettings
 import com.linecorp.lich.component.ComponentFactory
 import com.linecorp.lich.component.getComponent
 import kotlinx.coroutines.delay
@@ -21,9 +22,7 @@ interface DummyJsonClient {
         private const val TAG: String = "DummyJsonClient"
         override fun createComponent(context: Context): DummyJsonClient {
             val networkStatusProvider = context.getComponent(DemoNetworkStatusProvider)
-
-            Log.d(TAG, "Create DummyJsonClient by using Mock implementation")
-            return DummyJsonClientMock(context, networkStatusProvider)
+            return createDummyJsonClient(context, networkStatusProvider)
         }
     }
 }
@@ -37,11 +36,33 @@ interface SpaceFlightClient {
         private const val TAG: String = "SpaceFlightClient"
         override fun createComponent(context: Context): SpaceFlightClient {
             val networkStatusProvider = context.getComponent(DemoNetworkStatusProvider)
-
-            Log.d(TAG, "Create SpaceFlightClient by using Mock implementation")
-            return SpaceFlightClientMock(context, networkStatusProvider)
+            return createSpaceFlightClient(context, networkStatusProvider)
         }
     }
+}
+
+internal fun createDummyJsonClient(
+    context: Context,
+    networkStatusProvider: NetworkStatusProvider,
+): DummyJsonClient {
+    if (ClientSettings(context).useRealClient) {
+        Log.d("DummyJsonClient", "Create DummyJsonClient by using REAL implementation")
+        return DummyJsonClientMock(context, networkStatusProvider)
+    }
+    Log.d("DummyJsonClient", "Create DummyJsonClient by using Mock implementation")
+    return DummyJsonClientMock(context, networkStatusProvider)
+}
+
+internal fun createSpaceFlightClient(
+    context: Context,
+    networkStatusProvider: NetworkStatusProvider,
+): SpaceFlightClient {
+    if (ClientSettings(context).useRealClient) {
+        Log.d("SpaceFlightClient", "Create SpaceFlightClient by using REAL implementation")
+        return SpaceFlightClientMock(context, networkStatusProvider)
+    }
+    Log.d("SpaceFlightClient", "Create SpaceFlightClient by using Mock implementation")
+    return SpaceFlightClientMock(context, networkStatusProvider)
 }
 
 fun interface ClientDelayProvider {
