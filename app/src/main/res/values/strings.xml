@@ -15,4 +15,7 @@
     <string name="detail_retry">Retry</string>
     <string name="detail_add_favorite">Add to favorites</string>
     <string name="detail_remove_favorite">Remove from favorites</string>
+    <string name="item_time">Time: %1$s</string>
+    <string name="item_time_not_available">Not available</string>
+    <string name="item_source">Source: %1$s</string>
 </resources>

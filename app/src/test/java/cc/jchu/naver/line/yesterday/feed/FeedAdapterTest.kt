@@ -79,7 +79,7 @@ class FeedAdapterTest {
         adapter.submitFeed(
             listOf(
                 DummyJsonItem("1", "Product", "invalid-url", "beauty"),
-                SpaceFlightItem("2", "Article", "invalid-url", "Summary"),
+                SpaceFlightItem("2", "Article", "invalid-url", "Summary", "2026-08-25T14:57:26Z"),
             ),
             FeedFooterState.Ready,
         )
@@ -96,6 +96,18 @@ class FeedAdapterTest {
         ).text)
         assertEquals("Summary", spaceHolder.itemView.findViewById<android.widget.TextView>(
             cc.jchu.naver.line.yesterday.R.id.description,
+        ).text)
+        assertEquals("Time: Not available", dummyHolder.itemView.findViewById<android.widget.TextView>(
+            cc.jchu.naver.line.yesterday.R.id.time,
+        ).text)
+        assertEquals("Source: DummyJson", dummyHolder.itemView.findViewById<android.widget.TextView>(
+            cc.jchu.naver.line.yesterday.R.id.source,
+        ).text)
+        assertEquals("Time: 2026-08-25T14:57:26Z", spaceHolder.itemView.findViewById<android.widget.TextView>(
+            cc.jchu.naver.line.yesterday.R.id.time,
+        ).text)
+        assertEquals("Source: SpaceFlight", spaceHolder.itemView.findViewById<android.widget.TextView>(
+            cc.jchu.naver.line.yesterday.R.id.source,
         ).text)
         assertTrue(dummyHolder.itemView.findViewById<ImageView>(
             cc.jchu.naver.line.yesterday.R.id.image,

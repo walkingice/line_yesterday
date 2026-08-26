@@ -40,6 +40,8 @@ class DetailActivityTest {
         assertEquals("Title", binding.detailTitle.text)
         assertEquals("Description", binding.detailDescription.text)
         assertEquals("Extra", binding.detailExtraInformation.text)
+        assertEquals("Time: 2025-04-30T09:41:02.053Z", binding.detailTime.text)
+        assertEquals("Source: DummyJson", binding.detailSource.text)
     }
 
     @Test
@@ -176,6 +178,7 @@ class DetailActivityTest {
         imgUrl = "https://example.com/image.jpg",
         description = "Description",
         extraInformation = "Extra",
+        time = "2025-04-30T09:41:02.053Z",
     )
 
 }

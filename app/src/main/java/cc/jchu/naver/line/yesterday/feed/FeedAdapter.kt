@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil3.asImage
 import coil3.load
+import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.data.domain.DummyJsonItem
 import cc.jchu.naver.line.yesterday.data.domain.FeedFooterState
 import cc.jchu.naver.line.yesterday.data.domain.FeedItem
 import cc.jchu.naver.line.yesterday.data.domain.FeedSource
 import cc.jchu.naver.line.yesterday.data.domain.SpaceFlightItem
+import cc.jchu.naver.line.yesterday.data.domain.displayName
 import cc.jchu.naver.line.yesterday.databinding.ItemDummyJsonBinding
 import cc.jchu.naver.line.yesterday.databinding.ItemFeedFooterBinding
 import cc.jchu.naver.line.yesterday.databinding.ItemSpaceFlightBinding
@@ -97,6 +99,16 @@ class FeedAdapter(
             }
             binding.title.text = dummyItem.title
             binding.category.text = dummyItem.category
+            binding.time.text = binding.root.context.getString(
+                R.string.item_time,
+                dummyItem.time.ifBlank {
+                    binding.root.context.getString(R.string.item_time_not_available)
+                },
+            )
+            binding.source.text = binding.root.context.getString(
+                R.string.item_source,
+                dummyItem.source.displayName(),
+            )
             binding.root.setOnClickListener { onClick(dummyItem) }
         }
     }
@@ -113,6 +125,16 @@ class FeedAdapter(
             }
             binding.title.text = spaceItem.title
             binding.description.text = spaceItem.description
+            binding.time.text = binding.root.context.getString(
+                R.string.item_time,
+                spaceItem.time.ifBlank {
+                    binding.root.context.getString(R.string.item_time_not_available)
+                },
+            )
+            binding.source.text = binding.root.context.getString(
+                R.string.item_source,
+                spaceItem.source.displayName(),
+            )
             binding.root.setOnClickListener { onClick(spaceItem) }
         }
     }

@@ -10,7 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.ViewModelProvider
 import coil3.load
+import cc.jchu.naver.line.yesterday.R
 import cc.jchu.naver.line.yesterday.databinding.FragmentDetailBinding
+import cc.jchu.naver.line.yesterday.data.domain.displayName
 import cc.jchu.naver.line.yesterday.di.applicationComponent
 import cc.jchu.naver.line.yesterday.viewbinding.viewBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -101,4 +103,14 @@ internal fun renderDetailState(binding: FragmentDetailBinding, state: DetailUiSt
     binding.detailTitle.text = detail.title
     binding.detailDescription.text = detail.description
     binding.detailExtraInformation.text = detail.extraInformation
+    binding.detailTime.text = binding.root.context.getString(
+        R.string.item_time,
+        detail.time.ifBlank {
+            binding.root.context.getString(R.string.item_time_not_available)
+        },
+    )
+    binding.detailSource.text = binding.root.context.getString(
+        R.string.item_source,
+        detail.source.displayName(),
+    )
 }
