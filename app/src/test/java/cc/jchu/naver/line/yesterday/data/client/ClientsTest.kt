@@ -24,6 +24,9 @@ class ClientsTest {
     private val delay = RecordingDelayProvider(events)
     private val dummyJson = DummyJsonClientMock(context, network, delay)
     private val spaceFlight = SpaceFlightClientMock(context, network, delay)
+    private val responseFetcher = RecordingJsonResponseFetcher()
+    private val dummyJsonReal = DummyJsonClientReal(context, network, responseFetcher)
+    private val spaceFlightReal = SpaceFlightClientReal(context, network, responseFetcher)
 
     @Before
     fun clearSettings() {
@@ -119,7 +122,48 @@ class ClientsTest {
     }
 
     @Test
-    fun factoriesUseMockClientsForBothPreferenceValues() {
+    fun realClientsBuildExpectedUrlsAndReturnFetchedJson() = runBlocking {
+        assertEquals(ClientResult.Success("{}"), dummyJsonReal.getProducts(PageCursor("20")))
+        assertEquals(ClientResult.Success("{}"), dummyJsonReal.getProduct("7"))
+        assertEquals(ClientResult.Success("{}"), spaceFlightReal.getArticles(PageCursor("0")))
+        assertEquals(
+            ClientResult.Success("{}"),
+            spaceFlightReal.getArticles(
+                PageCursor("https://api.spaceflightnewsapi.net/v4/articles/?format=json&limit=10&offset=10"),
+            ),
+        )
+        assertEquals(ClientResult.Success("{}"), spaceFlightReal.getArticle("123"))
+
+        assertEquals(
+            listOf(
+                "https://dummyjson.com/products?limit=10&select=title,category,thumbnail&skip=20",
+                "https://dummyjson.com/products/7",
+                "https://api.spaceflightnewsapi.net/v4/articles/?format=json&limit=10&offset=0",
+                "https://api.spaceflightnewsapi.net/v4/articles/?format=json&limit=10&offset=10",
+                "https://api.spaceflightnewsapi.net/v4/articles/123/?format=json",
+            ),
+            responseFetcher.urls,
+        )
+    }
+
+    @Test
+    fun realClientsReturnOfflineWithoutFetching() = runBlocking {
+        network.online = false
+
+        assertEquals(ClientResult.Offline, dummyJsonReal.getProduct("7"))
+        assertTrue(responseFetcher.urls.isEmpty())
+    }
+
+    @Test
+    fun realClientsRejectUnsupportedCursorsWithoutFetching() = runBlocking {
+        assertTrue(dummyJsonReal.getProducts(PageCursor("15")) is ClientResult.Failure)
+        assertTrue(spaceFlightReal.getArticles(PageCursor("invalid")) is ClientResult.Failure)
+
+        assertTrue(responseFetcher.urls.isEmpty())
+    }
+
+    @Test
+    fun factoriesUseClientsMatchingPreferenceValue() {
         ClientSettings(context).useRealClient = false
         ShadowLog.clear()
 
@@ -131,8 +175,8 @@ class ClientsTest {
         ClientSettings(context).useRealClient = true
         ShadowLog.clear()
 
-        assertTrue(createDummyJsonClient(context, network) is DummyJsonClientMock)
-        assertTrue(createSpaceFlightClient(context, network) is SpaceFlightClientMock)
+        assertTrue(createDummyJsonClient(context, network) is DummyJsonClientReal)
+        assertTrue(createSpaceFlightClient(context, network) is SpaceFlightClientReal)
         assertFactoryLog("DummyJsonClient", "REAL")
         assertFactoryLog("SpaceFlightClient", "REAL")
     }
@@ -171,6 +215,15 @@ class ClientsTest {
             calls++
             events += "network"
             return online
+        }
+    }
+
+    private class RecordingJsonResponseFetcher : JsonResponseFetcher {
+        val urls = mutableListOf<String>()
+
+        override suspend fun fetch(url: String): ClientResult {
+            urls += url
+            return ClientResult.Success("{}")
         }
     }
 }
