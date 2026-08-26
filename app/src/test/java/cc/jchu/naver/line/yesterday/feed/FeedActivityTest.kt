@@ -76,6 +76,20 @@ class FeedActivityTest {
     }
 
     @Test
+    fun menuOpensSettings() {
+        val activity = Robolectric.buildActivity(FeedActivity::class.java).setup().get()
+        val menu = MenuBuilder(activity)
+
+        activity.onCreateOptionsMenu(menu)
+        activity.onOptionsItemSelected(menu.findItem(FeedActivity.MENU_SETTINGS))
+
+        assertEquals(
+            "cc.jchu.naver.line.yesterday.settings.SettingsActivity",
+            shadowOf(activity).nextStartedActivity.component?.className,
+        )
+    }
+
+    @Test
     fun backFinishesFeed() {
         val activity = Robolectric.buildActivity(FeedActivity::class.java).setup().get()
 
