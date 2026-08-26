@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.coil)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.coroutines.android)
     implementation(libs.coroutines.core)
     implementation(libs.gson)
